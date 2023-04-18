@@ -53,10 +53,22 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => OrdenBotones(),
+          //   ),
+          // );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => OrdenTitulos(),
+          //   ),
+          // );
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => OrdenBotones(),
+              builder: (context) => OrdenCuadricula(),
             ),
           );
         },
