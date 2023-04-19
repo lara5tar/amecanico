@@ -201,17 +201,6 @@ class Prueba extends StatelessWidget {
   }
 }
 
-class PopupMenuApp extends StatelessWidget {
-  const PopupMenuApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: PopupMenuExample(),
-    );
-  }
-}
-
 class PopupMenuWidget<T> extends PopupMenuEntry<T> {
   const PopupMenuWidget({
     Key? key,
@@ -242,16 +231,16 @@ class _PopupMenuWidgetState extends State<PopupMenuWidget> {
   Widget build(BuildContext context) => widget.child;
 }
 
-class PopupMenuExample extends StatefulWidget {
-  const PopupMenuExample({super.key});
+class CustomPopUpMenu extends StatefulWidget {
+  const CustomPopUpMenu({super.key});
 
   @override
-  State<PopupMenuExample> createState() => _PopupMenuExampleState();
+  State<CustomPopUpMenu> createState() => _CustomPopUpMenuState();
 }
 
 enum SampleItem { itemOne, itemTwo, itemThree }
 
-class _PopupMenuExampleState extends State<PopupMenuExample> {
+class _CustomPopUpMenuState extends State<CustomPopUpMenu> {
   SampleItem? selectedMenu;
 
   @override
@@ -274,7 +263,9 @@ class _PopupMenuExampleState extends State<PopupMenuExample> {
                   ? const Icon(Icons.close)
                   : selectedMenu == SampleItem.itemThree
                       ? const Icon(Icons.construction)
-                      : const SizedBox(),
+                      : const SizedBox(
+                          width: 24,
+                        ),
           PopupMenuButton<SampleItem>(
             icon: const Icon(Icons.arrow_drop_down_rounded),
             initialValue: selectedMenu,
@@ -362,7 +353,7 @@ class _EjemploFormularioState extends State<EjemploFormulario> {
               children: [
                 Text('Formulario 01:', style: TextStyle(fontSize: 20)),
                 const SizedBox(width: 10),
-                PopupMenuExample(),
+                CustomPopUpMenu(),
               ],
             ),
           ],
