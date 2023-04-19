@@ -340,6 +340,8 @@ class EjemploFormulario extends StatefulWidget {
 }
 
 class _EjemploFormularioState extends State<EjemploFormulario> {
+  List<String> textButton = ['Normal', 'Platino', 'Iridium'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -347,19 +349,176 @@ class _EjemploFormularioState extends State<EjemploFormulario> {
         title: const Text('Ejemplo de formulario'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Row(
-              children: [
-                Text('Formulario 01:', style: TextStyle(fontSize: 20)),
-                const SizedBox(width: 10),
-                CustomPopUpMenu(),
-              ],
+            CustomButton(
+              text: textButton[0],
+              onTap: () {},
+            ),
+            const SizedBox(height: 20),
+            CustomButton(
+              text: textButton[1],
+              onTap: () {},
+            ),
+            const SizedBox(height: 20),
+            CustomButton(
+              text: textButton[2],
+              onTap: () {},
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class CustomButton extends StatefulWidget {
+  final String text;
+  final Function onTap;
+  const CustomButton({super.key, required this.text, required this.onTap});
+
+  @override
+  State<CustomButton> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+  int opcion = 0;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Elige una opcion'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  color: Colors.green,
+                  iconSize: 80,
+                  icon: const Icon(Icons.done),
+                  onPressed: () {
+                    opcion = 1;
+                    Navigator.pop(context);
+                  },
+                ),
+                IconButton(
+                  color: Colors.yellow,
+                  iconSize: 80,
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    opcion = 2;
+                    Navigator.pop(context);
+                  },
+                ),
+                IconButton(
+                  color: Colors.red,
+                  iconSize: 80,
+                  icon: const Icon(Icons.warning),
+                  onPressed: () {
+                    opcion = 3;
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ).then((value) => setState(() {}));
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              height: 100,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1.5,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                ),
+                color: Colors.white,
+              ),
+              child: Center(
+                child: Text(
+                  widget.text,
+                  style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 1.5,
+              ),
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+              color: Colors.white,
+            ),
+            child: Center(
+              child: opcion == 1
+                  ? Icon(Icons.done)
+                  : opcion == 2
+                      ? Icon(Icons.close)
+                      : opcion == 3
+                          ? Text('F/S')
+                          : Text(''),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class FS extends StatelessWidget {
+  final String titulo;
+  const FS({super.key, required this.titulo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 150,
+          width: 150,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+            color: Color(0xFFE2504C),
+          ),
+          child: Center(
+              child: Text(titulo,
+                  style: TextStyle(fontSize: 100, color: Colors.white))),
+        ),
+        Container(
+          height: 50,
+          width: 150,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+            color: Color(0xFFE2504C),
+          ),
+          child: Center(child: Text('f/s', style: TextStyle(fontSize: 20))),
+        ),
+      ],
     );
   }
 }
