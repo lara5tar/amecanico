@@ -1,3 +1,4 @@
+import 'package:amecanico/Vista/testl.dart';
 import 'package:flutter/material.dart';
 
 class OrdenCuadricula extends StatefulWidget {
@@ -141,7 +142,11 @@ class _OrdenBotonesState extends State<OrdenBotones> {
       body: ListView(
         children: [
           Boton(
-            alPresionar: () {},
+            alPresionar: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const Afinacion();
+              }));
+            },
             imagen:
                 'https://thelogisticsworld.com/wp-content/uploads/2022/10/technician-checking-the-electrical-system-of-the-car-e1665089545141.jpg',
             nombre: 'Afinacion',
@@ -202,12 +207,9 @@ class Boton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: alPresionar(),
+      onTap: alPresionar as void Function()?,
       child: Container(
-        height: (MediaQuery.of(context).size.height -
-                50 -
-                MediaQuery.of(context).padding.top) /
-            6,
+        height: (MediaQuery.of(context).size.height - 120) / 6,
         decoration: BoxDecoration(
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
@@ -227,6 +229,42 @@ class Boton extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class Afinacion extends StatelessWidget {
+  const Afinacion({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: ListView(
+        padding: EdgeInsets.all(20),
+        children: [
+          const Text('Cambio de Bujias:', style: TextStyle(fontSize: 18)),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('4', style: TextStyle(fontSize: 20)),
+              CustomPopUpMenu(),
+              Text('6', style: TextStyle(fontSize: 20)),
+              CustomPopUpMenu(),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: const [
+              Text('8', style: TextStyle(fontSize: 20)),
+              const SizedBox(width: 45),
+              CustomPopUpMenu(),
+            ],
+          ),
+        ],
       ),
     );
   }

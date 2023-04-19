@@ -201,19 +201,6 @@ class Prueba extends StatelessWidget {
   }
 }
 
-enum SampleItem { itemOne, itemTwo, itemThree }
-
-class PopupMenuApp extends StatelessWidget {
-  const PopupMenuApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: PopupMenuExample(),
-    );
-  }
-}
-
 class PopupMenuWidget<T> extends PopupMenuEntry<T> {
   const PopupMenuWidget({
     Key? key,
@@ -244,66 +231,133 @@ class _PopupMenuWidgetState extends State<PopupMenuWidget> {
   Widget build(BuildContext context) => widget.child;
 }
 
-class PopupMenuExample extends StatefulWidget {
-  const PopupMenuExample({super.key});
+class CustomPopUpMenu extends StatefulWidget {
+  const CustomPopUpMenu({super.key});
 
   @override
-  State<PopupMenuExample> createState() => _PopupMenuExampleState();
+  State<CustomPopUpMenu> createState() => _CustomPopUpMenuState();
 }
 
-class _PopupMenuExampleState extends State<PopupMenuExample> {
+enum SampleItem { itemOne, itemTwo, itemThree }
+
+class _CustomPopUpMenuState extends State<CustomPopUpMenu> {
   SampleItem? selectedMenu;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('PopupMenuButton')),
-      body: Center(
-        child: PopupMenuButton<SampleItem>(
-          initialValue: selectedMenu,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.0),
-          ),
-          padding: EdgeInsets.zero,
-          offset: const Offset(-92, -80),
-          onSelected: (SampleItem item) {
-            setState(
-              () {
-                selectedMenu = item;
-              },
-            );
-          },
-          itemBuilder: (BuildContext context) {
-            return [
-              PopupMenuWidget(
-                height: 30.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 22),
-                      icon: const Icon(Icons.remove),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 22),
-                      icon: const Icon(Icons.add),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all(BeveledRectangleBorder()),
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey,
+          width: 1.5,
+        ),
+        borderRadius: BorderRadius.circular(50.0),
+      ),
+      padding: EdgeInsets.all(10),
+      child: Row(
+        children: [
+          const SizedBox(width: 10.0),
+          selectedMenu == SampleItem.itemOne
+              ? const Icon(Icons.done)
+              : selectedMenu == SampleItem.itemTwo
+                  ? const Icon(Icons.close)
+                  : selectedMenu == SampleItem.itemThree
+                      ? const Icon(Icons.construction)
+                      : const SizedBox(
+                          width: 24,
+                        ),
+          PopupMenuButton<SampleItem>(
+            icon: const Icon(Icons.arrow_drop_down_rounded),
+            initialValue: selectedMenu,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50.0),
+            ),
+            padding: EdgeInsets.zero,
+            offset: const Offset(-106, -80),
+            onSelected: (SampleItem item) {
+              setState(
+                () {
+                  selectedMenu = item;
+                },
+              );
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuWidget(
+                  height: 30.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 22),
+                        icon: const Icon(Icons.done),
+                        onPressed: () {
+                          setState(() {
+                            selectedMenu = SampleItem.itemOne;
+                          });
+                        },
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 22),
-                      icon: const Icon(Icons.remove),
-                      onPressed: () {},
-                    ),
-                  ],
+                      IconButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 22),
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          setState(() {
+                            selectedMenu = SampleItem.itemTwo;
+                          });
+                        },
+                      ),
+                      IconButton(
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              BeveledRectangleBorder()),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 22),
+                        icon: const Icon(Icons.construction),
+                        onPressed: () {
+                          setState(() {
+                            selectedMenu = SampleItem.itemThree;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ];
-          },
+              ];
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EjemploFormulario extends StatefulWidget {
+  const EjemploFormulario({super.key});
+
+  @override
+  State<EjemploFormulario> createState() => _EjemploFormularioState();
+}
+
+class _EjemploFormularioState extends State<EjemploFormulario> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ejemplo de formulario'),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text('Formulario 01:', style: TextStyle(fontSize: 20)),
+                const SizedBox(width: 10),
+                CustomPopUpMenu(),
+              ],
+            ),
+          ],
         ),
       ),
     );
