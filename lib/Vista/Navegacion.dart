@@ -1,9 +1,12 @@
-import 'package:amecanico/Vista/AgregarReoporte.dart';
+import 'package:amecanico/Vista/Reporte/AgregarReporte.dart';
 import 'package:amecanico/Vista/ClientePage.dart';
 import 'package:amecanico/Vista/InicioPage.dart';
+import 'package:amecanico/Vista/Opciones.dart';
 import 'package:amecanico/Vista/ReportePage.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+
+import 'Reporte/Servicios.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -59,18 +62,6 @@ class _HomePageState extends State<HomePage> {
               builder: (context) => OrdenBotones(),
             ),
           );
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => OrdenTitulos(),
-          //   ),
-          // );
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => OrdenCuadricula(),
-          //   ),
-          // );
         },
         child: const Icon(Icons.add),
       ),

@@ -20,7 +20,6 @@ class _Prueba01State extends State<Prueba01> {
           expansionCallback: (int index, bool isExpanded) {
             setState(
               () {
-                print('index: $index, isExpanded: $isExpanded');
                 for (int i = 0; i < _data.length; i++) {
                   if (i != index) {
                     _data[i] = false;
@@ -33,12 +32,37 @@ class _Prueba01State extends State<Prueba01> {
           children: [
             ExpansionPanel(
               headerBuilder: (BuildContext context, bool isExpanded) {
-                return ListTile(
-                  title: const Text('Panel A'),
+                return const ListTile(
+                  title: Text('Panel A'),
                 );
               },
-              body: const ListTile(
-                title: Text('This is all the inside of the panel'),
+              body: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    const Text('Cambio de Bujias:',
+                        style: TextStyle(fontSize: 18)),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text('4', style: TextStyle(fontSize: 20)),
+                        CustomPopUpMenu(),
+                        Text('6', style: TextStyle(fontSize: 20)),
+                        CustomPopUpMenu(),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: const [
+                        Text('8', style: TextStyle(fontSize: 20)),
+                        SizedBox(width: 30),
+                        CustomPopUpMenu(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               isExpanded: _data[0],
             ),
@@ -263,7 +287,7 @@ class _CustomPopUpMenuState extends State<CustomPopUpMenu> {
               : selectedMenu == SampleItem.itemTwo
                   ? const Icon(Icons.close)
                   : selectedMenu == SampleItem.itemThree
-                      ? const Icon(Icons.construction)
+                      ? const Text('F/S')
                       : const SizedBox(
                           width: 24,
                         ),
@@ -307,177 +331,36 @@ class _CustomPopUpMenuState extends State<CustomPopUpMenu> {
                           });
                         },
                       ),
-                      IconButton(
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                              BeveledRectangleBorder()),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 22),
-                        icon: const Icon(Icons.construction),
+                      TextButton(
                         onPressed: () {
                           setState(() {
                             selectedMenu = SampleItem.itemThree;
                           });
                         },
+                        child: Text(
+                          'F/S',
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
+                      // IconButton(
+                      //   style: ButtonStyle(
+                      //     shape: MaterialStateProperty.all(
+                      //         BeveledRectangleBorder()),
+                      //   ),
+                      //   padding: const EdgeInsets.symmetric(horizontal: 22),
+                      //   icon: const Icon(Icons.construction),
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       selectedMenu = SampleItem.itemThree;
+                      //     });
+                      //   },
+                      // ),
                     ],
                   ),
                 ),
               ];
             },
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class EjemploFormulario extends StatefulWidget {
-  const EjemploFormulario({super.key});
-
-  @override
-  State<EjemploFormulario> createState() => _EjemploFormularioState();
-}
-
-class _EjemploFormularioState extends State<EjemploFormulario> {
-  List<String> textButton = ['Normal', 'Platino', 'Iridium'];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ejemplo de formulario'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            CustomButton(
-              text: textButton[0],
-              onTap: () {},
-            ),
-            const SizedBox(height: 20),
-            CustomButton(
-              text: textButton[1],
-              onTap: () {},
-            ),
-            const SizedBox(height: 20),
-            CustomButton(
-              text: textButton[2],
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CustomButton extends StatefulWidget {
-  final String text;
-  final Function onTap;
-  const CustomButton({super.key, required this.text, required this.onTap});
-
-  @override
-  State<CustomButton> createState() => _CustomButtonState();
-}
-
-class _CustomButtonState extends State<CustomButton> {
-  int opcion = 0;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Elige una opcion'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  color: Colors.green,
-                  iconSize: 80,
-                  icon: const Icon(Icons.done),
-                  onPressed: () {
-                    opcion = 1;
-                    Navigator.pop(context);
-                  },
-                ),
-                IconButton(
-                  color: Colors.yellow,
-                  iconSize: 80,
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    opcion = 2;
-                    Navigator.pop(context);
-                  },
-                ),
-                IconButton(
-                  color: Colors.red,
-                  iconSize: 80,
-                  icon: const Icon(Icons.warning),
-                  onPressed: () {
-                    opcion = 3;
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          ),
-        ).then((value) => setState(() {}));
-      },
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              height: 100,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1.5,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  bottomLeft: Radius.circular(30),
-                ),
-                color: Colors.white,
-              ),
-              child: Center(
-                child: Text(
-                  widget.text,
-                  style: const TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-                width: 1.5,
-              ),
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-              color: Colors.white,
-            ),
-            child: Center(
-              child: opcion == 1
-                  ? Icon(Icons.done)
-                  : opcion == 2
-                      ? Icon(Icons.close)
-                      : opcion == 3
-                          ? Text('F/S')
-                          : Text(''),
-            ),
-          )
         ],
       ),
     );
