@@ -1,17 +1,29 @@
-import 'package:amecanico/Vista/Reporte/AgregarReporte.dart';
-import 'package:amecanico/Vista/Navegacion.dart';
-import 'package:amecanico/Vista/testl.dart';
+import 'package:amecanico/2.%20Vista/Navegacion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/adapters.dart';
+
+import '1. Modelo/Cliente.dart';
+import '1. Modelo/Coche.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      //systemNavigationBarColor: Color(0xFF545058),
     ),
   );
+  initFlutter();
   runApp(const MyApp());
+}
+
+void initFlutter() async {
+  await Hive.initFlutter();
+
+  Hive.registerAdapter(ClienteAdapter());
+  await Hive.openBox<Cliente>('cliente');
+
+  Hive.registerAdapter(CocheAdapter());
+  await Hive.openBox<Coche>('coche');
 }
 
 class MyApp extends StatelessWidget {

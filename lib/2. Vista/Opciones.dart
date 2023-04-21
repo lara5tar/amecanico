@@ -1,5 +1,5 @@
-import 'package:amecanico/Vista/Reporte/AgregarReporte.dart';
-import 'package:amecanico/Vista/testl.dart';
+import 'package:amecanico/2.%20Vista/Reporte/AgregarReporte.dart';
+import 'package:amecanico/2.%20Vista/testl.dart';
 import 'package:flutter/material.dart';
 
 class Opciones extends StatelessWidget {
