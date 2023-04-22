@@ -1,6 +1,6 @@
 import 'package:hive_flutter/adapters.dart';
 
-import '../1. Modelo/Coche.dart';
+import '../1-Modelo/Coche.dart';
 
 class Ccoche {
   Box<Coche> coches = Hive.box<Coche>('coches');

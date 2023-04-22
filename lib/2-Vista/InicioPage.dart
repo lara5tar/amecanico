@@ -239,6 +239,7 @@ class _InicioPageState extends State<InicioPage> {
   }
 }
 
+// ignore: must_be_immutable
 class CitaCompleta extends StatelessWidget {
   Map<String, String> cita = {};
   CitaCompleta({super.key, required this.cita});

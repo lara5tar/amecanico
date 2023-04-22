@@ -7,13 +7,11 @@ class PopupMenuWidget<T> extends PopupMenuEntry<T> {
     required this.child,
   }) : super(key: key);
 
-  @override
   final Widget child;
 
   @override
   final double height;
 
-  @override
   bool get enabled => false;
 
   @override

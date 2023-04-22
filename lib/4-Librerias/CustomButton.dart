@@ -166,16 +166,16 @@ class _CustomButtonState extends State<CustomButton> {
             ),
             child: Center(
               child: opcion == 1
-                  ? Icon(Icons.done, color: Colors.green, size: 80)
+                  ? const Icon(Icons.done, color: Colors.green, size: 80)
                   : opcion == 2
-                      ? Icon(Icons.close, color: Colors.yellow, size: 80)
+                      ? const Icon(Icons.close, color: Colors.yellow, size: 80)
                       : opcion == 3
-                          ? ImageIcon(
+                          ? const ImageIcon(
                               color: Colors.red,
                               AssetImage('assets/FS.png'),
                               size: 80, // Tamaño del icono
                             )
-                          : Text(''),
+                          : const Text(''),
             ),
           )
         ],

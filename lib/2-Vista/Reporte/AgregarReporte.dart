@@ -1,8 +1,6 @@
-import 'package:amecanico/2.%20Vista/testl.dart';
 import 'package:flutter/material.dart';
-
-import '../../4. Librerias/CustomButton.dart';
-import '../../4. Librerias/CustomPopupMenu.dart';
+import '../../4-Librerias/CustomButton.dart';
+import '../../4-Librerias/CustomPopupMenu.dart';
 
 class EjemploFormulario extends StatefulWidget {
   const EjemploFormulario({super.key});

@@ -1,10 +1,10 @@
-import 'package:amecanico/2.%20Vista/Navegacion.dart';
+import 'package:amecanico/2-Vista/Navegacion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import '1. Modelo/Cliente.dart';
-import '1. Modelo/Coche.dart';
+import '1-Modelo/Cliente.dart';
+import '1-Modelo/Coche.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -20,10 +20,10 @@ void initFlutter() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(ClienteAdapter());
-  await Hive.openBox<Cliente>('cliente');
+  await Hive.openBox<Cliente>('clientes');
 
   Hive.registerAdapter(CocheAdapter());
-  await Hive.openBox<Coche>('coche');
+  await Hive.openBox<Coche>('coches');
 }
 
 class MyApp extends StatelessWidget {
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
