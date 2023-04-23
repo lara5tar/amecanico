@@ -2,7 +2,7 @@ import 'package:amecanico/3-Controlador/clientesC.dart';
 import 'package:flutter/material.dart';
 
 import '../../1-Modelo/Cliente.dart';
-import 'AgregarClientePage.dart';
+import '../../4-Librerias/CustomListTile.dart';
 
 class BuscarCliente extends StatefulWidget {
   const BuscarCliente({super.key});
@@ -25,228 +25,100 @@ class _BuscarClienteState extends State<BuscarCliente> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xfff3f0f0),
       appBar: AppBar(
-        title: const Text('Selecciona Cliente'),
+        toolbarHeight: 70,
+        title: const Text('Clientes'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(
+              onPressed: () {},
+              child: const Text('Agregar',
+                  style: TextStyle(color: Colors.white, fontSize: 20)),
+            ),
+          ),
+          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: IconButton(onPressed: () {}, icon: Icon(Icons.done))),
+        ],
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: TextField(
-              controller: TextEditingController(),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Buscar Cliente',
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
           const SizedBox(height: 20),
-          ListTile(
-            title: const Text('Nuevo Cliente', style: TextStyle(fontSize: 20)),
-            leading: Icon(Icons.person_add),
-            onTap: () {
-              for (var x in listaclientes) {
-                print(x[0].nombre!.substring(0, 1));
-                for (var y in x) {
-                  print(y.nombre);
-                }
-              }
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const AgregarClientePage();
-                  },
-                ),
-              ).then(
-                (value) => setState(
-                  () {
-                    listaclientes = cclientes.listClientesOrdenadosPorLetra;
-                  },
-                ),
-              );
-            },
-          ),
           Expanded(
-            child: SizedBox(
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: listaclientes.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        leading: Text(
-                          cclientes
-                              .listClientesOrdenadosPorLetra[index][0].nombre!
-                              .substring(0, 1),
-                          style: const TextStyle(fontSize: 20),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: ListView(
+                children: [
+                  for (var clientesletra in listaclientes)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              clientesletra[0].nombre!.substring(0, 1),
+                              style: const TextStyle(
+                                  fontSize: 30, color: Colors.black54),
+                            ),
+                          ),
                         ),
-                        title: Divider(
-                          color: Colors.grey[300],
-                          thickness: 1.5,
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(20),
-                          // border: Border.all(
-                          //   color: Colors.black,
-                          // ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            for (int i = 0;
-                                i < listaclientes[index].length - 1;
-                                i++)
-                              if (seleccionado == listaclientes[index][i])
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue[200],
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      ListTile(
-                                        title: Text(
-                                          listaclientes[index][i].nombre!,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 25),
-                                        ),
-                                        subtitle: Text(
-                                          listaclientes[index][i].telefono!,
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                        onTap: () {
-                                          setState(() {
-                                            seleccionado = Cliente();
-                                          });
-                                        },
-                                      ),
-                                      Container(
-                                        height: 1,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        child: Text(''),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              else
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              for (int i = 0; i < clientesletra.length - 1; i++)
                                 Column(
                                   children: [
-                                    Container(
-                                      // decoration: BoxDecoration(
-                                      //   borderRadius: BorderRadius.circular(10),
-                                      //   border: Border.all(
-                                      //     color: Colors.grey.shade500,
-                                      //   ),
-                                      // ),
-                                      child: ListTile(
-                                        title: Text(
-                                          listaclientes[index][i].nombre!,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 25),
-                                        ),
-                                        subtitle: Text(
-                                          listaclientes[index][i].telefono!,
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                        onTap: () {
-                                          setState(
-                                            () {
-                                              seleccionado =
-                                                  listaclientes[index][i];
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 1,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      child: Text(''),
+                                    CustomListTile(
+                                      esSeleccionado:
+                                          seleccionado == clientesletra[i],
+                                      onTap: () {
+                                        if (seleccionado == clientesletra[i]) {
+                                          seleccionado = Cliente();
+                                        } else {
+                                          seleccionado = clientesletra[i];
+                                        }
+                                        setState(() {});
+                                      },
+                                      cliente: clientesletra[i],
+                                      esUltimo: false,
                                     ),
                                   ],
                                 ),
-                            if (seleccionado ==
-                                listaclientes[index]
-                                    [listaclientes[index].length - 1])
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.blue[200],
-                                ),
-                                child: ListTile(
-                                  title: Text(
-                                    listaclientes[index]
-                                            [listaclientes[index].length - 1]
-                                        .nombre!,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  ),
-                                  subtitle: Text(
-                                    listaclientes[index]
-                                            [listaclientes[index].length - 1]
-                                        .telefono!,
-                                    style: const TextStyle(fontSize: 20),
-                                  ),
-                                  onTap: () {
-                                    setState(() {
-                                      seleccionado = Cliente();
-                                    });
-                                  },
-                                ),
-                              )
-                            else
-                              Container(
-                                // decoration: BoxDecoration(
-                                //   color: Colors.blue[200],
-                                // ),
-                                child: ListTile(
-                                  title: Text(
-                                    listaclientes[index]
-                                            [listaclientes[index].length - 1]
-                                        .nombre!,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  ),
-                                  subtitle: Text(
-                                    listaclientes[index]
-                                            [listaclientes[index].length - 1]
-                                        .telefono!,
-                                    style: const TextStyle(fontSize: 20),
-                                  ),
-                                  onTap: () {
-                                    setState(
-                                      () {
-                                        seleccionado = listaclientes[index]
-                                            [listaclientes[index].length - 1];
-                                      },
-                                    );
-                                  },
-                                ),
+                              CustomListTile(
+                                esSeleccionado: seleccionado ==
+                                    clientesletra[clientesletra.length - 1],
+                                onTap: () {
+                                  if (seleccionado ==
+                                      clientesletra[clientesletra.length - 1]) {
+                                    seleccionado = Cliente();
+                                  } else {
+                                    seleccionado =
+                                        clientesletra[clientesletra.length - 1];
+                                  }
+                                  setState(() {});
+                                },
+                                cliente:
+                                    clientesletra[clientesletra.length - 1],
+                                esUltimo: true,
                               ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    ),
+                ],
               ),
             ),
           ),

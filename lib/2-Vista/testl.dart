@@ -1,6 +1,68 @@
 import 'package:flutter/material.dart';
 
 import '../4-Librerias/CustomPopupMenu.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:contacts_service/contacts_service.dart';
+
+class ContactosPage extends StatefulWidget {
+  @override
+  _ContactosPageState createState() => _ContactosPageState();
+}
+
+class _ContactosPageState extends State<ContactosPage> {
+  List<Contact> _contacts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getContacts();
+  }
+
+  Future<void> _getPermission() async {
+    final PermissionStatus permission = await Permission.contacts.request();
+    if (permission != PermissionStatus.granted) {
+      throw 'Permission denied';
+    }
+  }
+
+  Future<void> _getContacts() async {
+    await _getPermission().then((value) => {
+          ContactsService.getContacts().then((value) => {
+                setState(() {
+                  _contacts = value.toList();
+                })
+              })
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _getContacts();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Contactos'),
+      ),
+      body: ListView.builder(
+        itemCount: _contacts.length,
+        itemBuilder: (context, index) {
+          Contact contact = _contacts[index];
+          // contact.phones!.forEach((element) {
+          //   element.value = element.value!.replaceAll('(', '');
+          //   element.value = element.value!.replaceAll(')', '');
+          //   element.value = element.value!.replaceAll('-', ' ');
+          //   print(element.value);
+          // });
+          return ListTile(
+            title: Text(contact.displayName ?? ''),
+            subtitle: Text(contact.phones!.isNotEmpty
+                ? contact.phones!.first.value.toString()
+                : ''),
+          );
+        },
+      ),
+    );
+  }
+}
 
 class Prueba01 extends StatefulWidget {
   const Prueba01({super.key});

@@ -38,6 +38,8 @@ dependencies:
   animated_bottom_navigation_bar: ^1.2.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  permission_handler: ^10.2.0
+  contacts_service: ^0.6.3
 
 dev_dependencies:
   flutter_test:
