@@ -9,21 +9,34 @@ class Ccliente {
   List<Cliente> get listClientes => clientes.values.toList();
 
   List<Cliente> get listClientesOrdenados =>
-      clientes.values.toList()..sort((a, b) => a.nombre!.compareTo(b.nombre!));
+      clientes.values.toList()..sort((a, b) => a.nombre.compareTo(b.nombre));
 
   List<List<Cliente>> get listClientesOrdenadosPorLetra {
     List<List<Cliente>> lista = [];
     List<Cliente> listaClientes = listClientesOrdenados;
     String letra = '';
     for (int i = 0; i < listaClientes.length; i++) {
-      if (letra != listaClientes[i].nombre![0]) {
-        letra = listaClientes[i].nombre![0];
+      if (letra != listaClientes[i].nombre[0]) {
+        letra = listaClientes[i].nombre[0];
         lista.add([listaClientes[i]]);
       } else {
         lista[lista.length - 1].add(listaClientes[i]);
       }
     }
     return lista;
+  }
+
+  List<Cliente> buscarCliente(String controlador) {
+    return clientes.values
+        .where((element) =>
+            element.nombre.toLowerCase().contains(controlador.toLowerCase()) ||
+            element.telefono.toLowerCase().contains(controlador.toLowerCase()))
+        .toList();
+  }
+
+  void agregarCocheACliente(Cliente cliente, Coche coche) {
+    cliente.coches.add(coche);
+    clientes.put(cliente.nombre, cliente);
   }
 
   void agregarCliente(nombre, domicilio, telefono, List<Coche> coches) {

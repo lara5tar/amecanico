@@ -60,16 +60,16 @@ class _CustomListTileState extends State<CustomListTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.cliente.nombre!,
-                        style: TextStyle(
+                        widget.cliente.nombre,
+                        style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        widget.cliente.telefono!,
-                        style: TextStyle(
+                        widget.cliente.telefono,
+                        style: const TextStyle(
                           fontSize: 20,
                         ),
                       ),
@@ -89,17 +89,6 @@ class _CustomListTileState extends State<CustomListTile> {
                       ),
               ],
             ),
-
-            // const Spacer(),
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: const Icon(Icons.edit),
-            // ),
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: const Icon(Icons.delete),
-            // ),
-            // const SizedBox(width: 10),
           ],
         ),
       ),

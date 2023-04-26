@@ -3,28 +3,28 @@ import 'package:hive/hive.dart';
 @HiveType(typeId: 1)
 class Coche {
   @HiveField(0)
-  String? marca;
+  String marca;
   @HiveField(1)
-  String? modelo;
+  String modelo;
   @HiveField(2)
-  String? anio;
+  String anio;
   @HiveField(3)
-  String? motor;
+  String motor;
   @HiveField(4)
-  String? vin;
+  String vin;
   @HiveField(5)
-  String? kilometraje;
+  String kilometraje;
   @HiveField(6)
-  String? placa;
+  String placa;
 
   Coche({
-    this.marca,
-    this.modelo,
-    this.anio,
-    this.motor,
-    this.vin,
-    this.kilometraje,
-    this.placa,
+    required this.marca,
+    required this.modelo,
+    required this.anio,
+    required this.motor,
+    required this.vin,
+    required this.kilometraje,
+    required this.placa,
   });
 
   @override
@@ -34,7 +34,7 @@ class Coche {
 
 class CocheAdapter extends TypeAdapter<Coche> {
   @override
-  final int typeId = 1;
+  final typeId = 1;
 
   @override
   Coche read(BinaryReader reader) {

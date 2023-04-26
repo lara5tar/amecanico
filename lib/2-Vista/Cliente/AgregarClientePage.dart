@@ -1,6 +1,8 @@
 import 'package:amecanico/3-Controlador/clientesC.dart';
 import 'package:flutter/material.dart';
 
+import '../../1-Modelo/Coche.dart';
+
 class AgregarClientePage extends StatefulWidget {
   const AgregarClientePage({super.key});
 
@@ -50,11 +52,12 @@ class _AgregarClientePageState extends State<AgregarClientePage> {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
+              List<Coche> lista = [];
               cclientes.agregarCliente(
                 nombre,
                 domicilio,
                 telefono,
-                [],
+                lista,
               );
               Navigator.pop(context);
             },

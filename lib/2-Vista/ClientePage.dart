@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../1-Modelo/Cliente.dart';
+import '../3-Controlador/clientesC.dart';
+import '../4-Librerias/CustomListTile.dart';
+
 class ClientePage extends StatefulWidget {
   const ClientePage({super.key});
 
@@ -8,49 +12,142 @@ class ClientePage extends StatefulWidget {
 }
 
 class _ClientePageState extends State<ClientePage> {
+  Ccliente cclientes = Ccliente();
+  late List<List<Cliente>> listaclientes;
+  bool estaBuscando = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    listaclientes = cclientes.listClientesOrdenadosPorLetra;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: [
-          const Text('Clientes'),
-          const SizedBox(height: 20),
-          Row(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
             children: [
               Expanded(
                 child: TextField(
-                  controller: TextEditingController(),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.search),
-                    hintText: 'Buscar cliente',
+                  readOnly: true,
+                  onTap: () {
+                    setState(() {
+                      estaBuscando = true;
+                    });
+                  },
+                  onTapOutside: (event) {
+                    setState(() {
+                      estaBuscando = false;
+                      FocusScope.of(context).unfocus();
+                    });
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      listaclientes = cclientes.listClientesOrdenadosPorLetra;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: 'Buscar',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(width: 20),
-              IconButton(
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
-                },
-                icon: const Icon(Icons.close),
+              const SizedBox(width: 10),
+              AnimatedContainer(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                  color: estaBuscando ? Colors.red : Colors.transparent,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                duration: const Duration(milliseconds: 400),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.close),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black12, width: 2),
-              ),
-              child: ListView(
-                children: [],
-              ),
+        ),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(30),
             ),
-          )
-        ],
-      ),
+            child: ListView(
+              children: [
+                for (var clientesletra in listaclientes)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            clientesletra[0].nombre.substring(0, 1),
+                            style: const TextStyle(
+                                fontSize: 30, color: Colors.black54),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            for (int i = 0; i < clientesletra.length - 1; i++)
+                              Column(
+                                children: [
+                                  CustomListTile(
+                                    esSeleccionado: false,
+                                    onTap: () {
+                                      // Navigator.pushNamed(
+                                      //   context,
+                                      //   '/coche',
+                                      //   arguments: clientesletra[i],
+                                      // );
+                                    },
+                                    cliente: clientesletra[i],
+                                    esUltimo: false,
+                                  ),
+                                ],
+                              ),
+                            CustomListTile(
+                              esSeleccionado: false,
+                              onTap: () {
+                                // Navigator.pushNamed(
+                                //   context,
+                                //   '/coche',
+                                //   arguments:
+                                //       clientesletra[clientesletra.length - 1],
+                                // );
+                              },
+                              cliente: clientesletra[clientesletra.length - 1],
+                              esUltimo: true,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

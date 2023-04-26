@@ -1,4 +1,4 @@
-import 'package:amecanico/2-Vista/Cliente/BuscarCliente.dart';
+import 'package:amecanico/2-Vista/Cliente/SeleccionarCliente.dart';
 import 'package:amecanico/2-Vista/ClientePage.dart';
 import 'package:amecanico/2-Vista/InicioPage.dart';
 import 'package:amecanico/2-Vista/ReportePage.dart';
@@ -32,14 +32,33 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xfff3f0f0),
       appBar: AppBar(
-        title: const Text('Automotriz Martinez'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {},
+        title: const Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Column(
+            children: [
+              Text(
+                'AUTOMOTRIZ',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                'MARTINEZ',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
+        centerTitle: true,
+        toolbarHeight: 80,
       ),
       body: vistas[index],
       bottomNavigationBar: AnimatedBottomNavigationBar(
@@ -56,7 +75,7 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BuscarCliente(),
+              builder: (context) => SeleccionarCliente(),
             ),
           );
         },
