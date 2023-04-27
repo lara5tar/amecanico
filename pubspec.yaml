@@ -40,6 +40,7 @@ dependencies:
   hive_flutter: ^1.1.0
   permission_handler: ^10.2.0
   contacts_service: ^0.6.3
+  calendar_view: ^1.0.3
 
 dev_dependencies:
   flutter_test:

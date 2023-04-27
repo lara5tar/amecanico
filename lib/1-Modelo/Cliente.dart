@@ -20,6 +20,25 @@ class Cliente {
     required this.coches,
   });
 
+  // void partirPastel() {
+  //   print('Se partio el pastel en 8');
+  // }
+
+  // void partirPastelPorNumero(int partes) {
+  //   print('Se partio el pastel en' + partes.toString() + 'partes');
+  // }
+
+  // String partirPastelyDar() {
+  //   print('Se partio el pastel en 8 partes');
+
+  //   return 'Jesus';
+  // }
+
+  // String partirPastelyDarPorNumeroyNombre(int partes, String nombre) {
+  //   print('Se partio el pastel en ' + partes.toString() + 'partes');
+  //   return nombre;
+  // }
+
   @override
   String toString() =>
       'Cliente(nombre: $nombre, domicilio: $domicilio, telefono: $telefono, coches: $coches)';
