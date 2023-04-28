@@ -1,18 +1,36 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
-class citasC {
-  Box<CalendarEventData> box = Hive.box<CalendarEventData>('citas');
+class CitasC {
+  Box<CalendarEventData>? citasBox;
 
-  List<CalendarEventData> get listCitas => box.values.toList();
+  Future<CitasC> init(context) async {
+    await Hive.initFlutter();
+    citasBox = await Hive.openBox<CalendarEventData>('citas');
+    initCitas(context);
+    return this;
+  }
 
-  initCitas(BuildContext context) {
-    print(box.length);
-    for (var i = 0; i < listCitas.length; i++) {
-      CalendarEventData prueba = listCitas[i];
-      CalendarControllerProvider.of(context).controller.add(prueba);
+  void initCitas(BuildContext context) {
+    if (!citasBox!.isOpen) {
+      print('no esta abierto');
+      return;
     }
+    CalendarControllerProvider.of(context)
+        .controller
+        .addAll(citasBox!.values.toList());
+    // for (var i = 0; i < citasBox!.length; i++) {
+    //   print(citasBox!.getAt(i)?.title);
+    //   if (citasBox!.getAt(i) != null) {
+    //     CalendarEventData cita = citasBox!.getAt(i)!;
+    //     CalendarControllerProvider.of(context).controller.add(
+    //           cita,
+    //         );
+    //     print(citasBox!.getAt(i)?.title);
+    //   }
+    // }
   }
 
   void agregarCita(
@@ -23,7 +41,7 @@ class citasC {
       required DateTime horaFin,
       required Color color,
       required String evento}) {
-    box.put(
+    citasBox!.put(
       titulo,
       CalendarEventData(
         title: titulo,

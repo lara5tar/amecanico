@@ -1,3 +1,4 @@
+import 'package:amecanico/2-Vista/CalendarioPage.dart';
 import 'package:amecanico/2-Vista/Cliente/SeleccionarCliente.dart';
 import 'package:amecanico/2-Vista/ClientePage.dart';
 import 'package:amecanico/2-Vista/InicioPage.dart';
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     const InicioPage(),
     const ReportePage(),
     const ClientePage(),
-    const Center(child: Text('Calendario')),
+    const CalendarioPage(),
   ];
   //lista de los items del bottomNavigationBar
   List<IconData> botonesVistas = const [

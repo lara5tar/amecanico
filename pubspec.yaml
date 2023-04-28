@@ -41,6 +41,8 @@ dependencies:
   permission_handler: ^10.2.0
   contacts_service: ^0.6.3
   calendar_view: ^1.0.3
+  group_button: ^5.2.2
+  custom_radio_grouped_button: ^2.2.0
 
 dev_dependencies:
   flutter_test:
