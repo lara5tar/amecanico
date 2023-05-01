@@ -33,6 +33,20 @@ class CitasC {
     // }
   }
 
+  void agregarCitaPorSeleccion(DateTime date) {
+    citasBox!.put(
+      date.toString(),
+      CalendarEventData(
+        title: date.toString(),
+        description: 'descripcion',
+        date: date,
+        startTime: date,
+        endTime: date,
+        color: Color(0xffe6a02e),
+      ),
+    );
+  }
+
   void agregarCita(
       {required String titulo,
       required String descripcion,

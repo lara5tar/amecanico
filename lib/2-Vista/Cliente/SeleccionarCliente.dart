@@ -39,18 +39,6 @@ class _SeleccionarClienteState extends State<SeleccionarCliente> {
           fontWeight: FontWeight.bold,
           letterSpacing: 1.5,
         ),
-        // flexibleSpace: Container(
-        //   decoration: const BoxDecoration(
-        //     gradient: LinearGradient(
-        //       begin: Alignment.topLeft,
-        //       end: Alignment.bottomRight,
-        //       colors: <Color>[
-        //         Color(0xff2c3e50),
-        //         Color(0xffbdc3c7),
-        //       ],
-        //     ),
-        //   ),
-        // ),
         actions: [
           IconButton(
             iconSize: 40,
@@ -70,42 +58,6 @@ class _SeleccionarClienteState extends State<SeleccionarCliente> {
             },
             icon: const Icon(Icons.add),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(10.0),
-          //   child: ElevatedButton(
-          //     onPressed: () {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (context) => const AgregarClientePage(),
-          //         ),
-          //       ).then(
-          //         (value) => setState(
-          //           () {
-          //             listaclientes = cclientes.listClientesOrdenadosPorLetra;
-          //           },
-          //         ),
-          //       );
-          //     },
-          //     style: ButtonStyle(
-          //       backgroundColor: MaterialStateColor.resolveWith(
-          //           (states) => const Color(0xffe6a02e)),
-          //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          //         RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(30.0),
-          //         ),
-          //       ),
-          //     ),
-          //     child: const Text(
-          //       'Agregar',
-          //       style: TextStyle(
-          //         fontSize: 20,
-          //         // color: Colors.white,
-          //         letterSpacing: 1.5,
-          //       ),
-          //     ),
-          //   ),
-          // ),
           IconButton(
             onPressed: () {
               Navigator.push(

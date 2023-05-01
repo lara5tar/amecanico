@@ -1,9 +1,5 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
-
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:group_button/group_button.dart';
-
 import '../3-Controlador/ControladorCitas.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 
@@ -18,16 +14,94 @@ class _CalendarioPageState extends State<CalendarioPage> {
   bool init = true;
   String selected = 'Mes';
 
-  Widget formatoSeleccionad() {
+  Widget formatoSeleccionad(CitasC citasC) {
     switch (selected) {
       case 'Dia':
-        return const DayView();
+        return DayView(
+          heightPerMinute: 1.5,
+          onDateTap: (date) {
+            citasC.agregarCitaPorSeleccion(date);
+            showModalBottomSheet(
+              backgroundColor: Colors.transparent,
+              context: context,
+              builder: (context) {
+                return Container(
+                  height: 320,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Agregar Cita',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: TextEditingController(),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Titulo',
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: TextEditingController(),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Descripcion',
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  citasC.agregarCitaPorSeleccion(date);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Agregar'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+            print(date);
+            setState(() {});
+          },
+        );
       case 'Semana':
-        return const WeekView();
+        return WeekView(
+          width: MediaQuery.of(context).size.width,
+          heightPerMinute: 2,
+          onDateTap: (date) {
+            print(date);
+          },
+        );
       case 'Mes':
-        return const MonthView();
+        return MonthView(
+          onCellTap: (events, date) {
+            print(date);
+          },
+        );
       default:
-        return const MonthView();
+        return MonthView(
+          onCellTap: (events, date) {
+            print(date);
+          },
+        );
     }
   }
 
@@ -79,7 +153,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                   ),
                 ),
                 Expanded(
-                  child: formatoSeleccionad(),
+                  child: formatoSeleccionad(snapshot.data!),
                 ),
               ],
             );

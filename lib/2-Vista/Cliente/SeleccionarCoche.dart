@@ -41,6 +41,7 @@ class _SeleccionarCocheState extends State<SeleccionarCoche> {
                       MaterialPageRoute(
                         builder: (context) => IngresarCarro(
                           cliente: widget.cliente,
+                          seGuardara: true,
                         ),
                       ),
                     ).then((value) {

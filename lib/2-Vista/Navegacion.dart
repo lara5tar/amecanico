@@ -1,5 +1,5 @@
 import 'package:amecanico/2-Vista/CalendarioPage.dart';
-import 'package:amecanico/2-Vista/Cliente/SeleccionarCliente.dart';
+import 'package:amecanico/2-Vista/Cliente/NewSeleccionarCliente.dart';
 import 'package:amecanico/2-Vista/ClientePage.dart';
 import 'package:amecanico/2-Vista/InicioPage.dart';
 import 'package:amecanico/2-Vista/ReportePage.dart';
@@ -27,60 +27,101 @@ class _HomePageState extends State<HomePage> {
   List<IconData> botonesVistas = const [
     Icons.home,
     Icons.car_repair,
-    Icons.person,
-    Icons.calendar_today,
+    Icons.groups,
+    Icons.event,
+  ];
+
+  List<String> titulos = const [
+    'Inicio',
+    'Reporte',
+    'Clientes',
+    'Calendario',
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff3f0f0),
+      backgroundColor: const Color(0xfff3f0f0),
       appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Column(
-            children: [
-              Text(
-                'AUTOMOTRIZ',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+        leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.account_circle,
+            size: 40,
+          ),
+        ),
+        title: const Column(
+          children: [
+            Text(
+              'AUTOMOTRIZ',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              Text(
-                'MARTINEZ',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+            ),
+            Text(
+              'MARTINEZ',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        toolbarHeight: 80,
+        actions: [
+          PopupMenuButton(
+            iconSize: 40,
+            icon: const Icon(Icons.menu),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: TextButton(
+                  onPressed: () {},
+                  child: const Text('Configuración'),
                 ),
               ),
             ],
           ),
-        ),
-        centerTitle: true,
-        toolbarHeight: 80,
+        ],
       ),
       body: vistas[index],
-      bottomNavigationBar: AnimatedBottomNavigationBar(
+      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
         onTap: indexSeleccionado,
-        icons: botonesVistas,
+        //icons: botonesVistas,
         activeIndex: index,
-        activeColor: Colors.blueGrey,
+        //activeColor: Color(0xffe6a02e),
+        height: 70,
         elevation: 100,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.softEdge,
+        itemCount: vistas.length,
+        tabBuilder: (int index, bool isActive) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(botonesVistas[index]),
+              Text(titulos[index]),
+            ],
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.large(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SeleccionarCliente(),
+              builder: (context) => const NewSeleccionarCliente(),
             ),
           );
         },
-        child: const Icon(Icons.add),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.assignment),
+            Text('Orden'),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

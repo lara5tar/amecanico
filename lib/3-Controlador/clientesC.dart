@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../1-Modelo/Cliente.dart';
 import '../1-Modelo/Coche.dart';
@@ -25,29 +26,52 @@ class Ccliente {
     return lista;
   }
 
+  bool existeCliente(String nombre) {
+    return clientes.containsKey(nombre);
+  }
+
+  Cliente? buscarClientePorNombre(String nombre) {
+    return clientes.get(nombre);
+  }
+
   List<Cliente> buscarCliente(String controlador) {
     return clientes.values
         .where((element) =>
             element.nombre.toLowerCase().contains(controlador.toLowerCase()) ||
-            element.telefono.toLowerCase().contains(controlador.toLowerCase()))
+            element.telefono
+                .replaceAll(' - ', '')
+                .toLowerCase()
+                .contains(controlador.toLowerCase()))
         .toList();
   }
 
   void agregarCocheACliente(Cliente cliente, Coche coche) {
     cliente.coches.add(coche);
-    clientes.put(cliente.nombre, cliente);
+    clientes.put(cliente.telefono, cliente);
   }
 
-  void agregarCliente(nombre, domicilio, telefono, List<Coche> coches) {
+  String agregarCliente(nombre, domicilio, TextEditingController telefono) {
+    print('entro');
+    if (telefono.text.length != 16) return 'El telefono debe tener 10 digitos';
+    if (telefono.text == '' || nombre.text == '')
+      return 'Faltan campos por llenar';
+
+    if (clientes.containsKey(telefono.text)) return 'El telefono ya existe';
+
+    if (listClientes.any((element) => element.nombre == nombre.text)) {
+      return 'El nombre ya existe';
+    }
+
     clientes.put(
-      nombre.text,
+      telefono.text,
       Cliente(
         nombre: nombre.text,
-        domicilio: domicilio.text,
+        domicilio: domicilio.text == '' ? 'Sin domicilio' : domicilio.text,
         telefono: telefono.text,
-        coches: coches,
+        coches: [],
       ),
     );
+    return 'agregado';
   }
 
   void editarCliente(

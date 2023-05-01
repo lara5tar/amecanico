@@ -16,6 +16,8 @@ class Coche {
   String kilometraje;
   @HiveField(6)
   String placa;
+  @HiveField(7)
+  String imagen;
 
   Coche({
     required this.marca,
@@ -25,6 +27,7 @@ class Coche {
     required this.vin,
     required this.kilometraje,
     required this.placa,
+    required this.imagen,
   });
 
   @override
@@ -46,6 +49,7 @@ class CocheAdapter extends TypeAdapter<Coche> {
       vin: reader.read(),
       kilometraje: reader.read(),
       placa: reader.read(),
+      imagen: reader.read(),
     );
   }
 
@@ -58,6 +62,7 @@ class CocheAdapter extends TypeAdapter<Coche> {
       ..write(obj.motor)
       ..write(obj.vin)
       ..write(obj.kilometraje)
-      ..write(obj.placa);
+      ..write(obj.placa)
+      ..write(obj.imagen);
   }
 }

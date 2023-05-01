@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:amecanico/3-Controlador/ImagenC.dart';
 import 'package:amecanico/3-Controlador/clientesC.dart';
 import 'package:flutter/material.dart';
 import '../../1-Modelo/Cliente.dart';
@@ -5,86 +8,243 @@ import '../../1-Modelo/Coche.dart';
 
 class IngresarCarro extends StatefulWidget {
   final Cliente cliente;
-  IngresarCarro({super.key, required this.cliente});
+  final bool seGuardara;
+  const IngresarCarro(
+      {super.key, required this.cliente, required this.seGuardara});
 
   @override
   State<IngresarCarro> createState() => _IngresarCarroState();
 }
 
 class _IngresarCarroState extends State<IngresarCarro> {
-  TextEditingController Marca = TextEditingController();
+  ImagenC imagenC = ImagenC();
+  File? imagen;
 
-  TextEditingController Modelo = TextEditingController();
+  TextEditingController marca = TextEditingController();
+  TextEditingController modelo = TextEditingController();
+  TextEditingController anio = TextEditingController();
+  TextEditingController motor = TextEditingController();
+  TextEditingController vin = TextEditingController();
+  TextEditingController km = TextEditingController();
+  TextEditingController placas = TextEditingController();
 
-  TextEditingController Anio = TextEditingController();
+  FocusNode marcaFocus = FocusNode();
+  FocusNode modeloFocus = FocusNode();
+  FocusNode anioFocus = FocusNode();
+  FocusNode motorFocus = FocusNode();
+  FocusNode vinFocus = FocusNode();
+  FocusNode kmFocus = FocusNode();
+  FocusNode placasFocus = FocusNode();
 
-  TextEditingController Motor = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    imagenC.iniciar();
+  }
 
-  TextEditingController Vin = TextEditingController();
+  void agregarCoche() {
+    print('Aqui se guardara el coche  ');
 
-  TextEditingController Km = TextEditingController();
+    imagenC.guardarImagen().then((value) {
+      if (value != null) {
+        Coche coche = Coche(
+          marca: marca.text,
+          modelo: modelo.text,
+          anio: anio.text,
+          motor: motor.text,
+          vin: vin.text,
+          kilometraje: km.text,
+          placa: placas.text,
+          imagen: value.path,
+        );
 
-  TextEditingController Placas = TextEditingController();
+        if (widget.seGuardara) {
+          print('opcion 1');
+          Ccliente().agregarCocheACliente(widget.cliente, coche);
+          Navigator.pop(context);
+        } else {
+          print('opcion 2');
+          widget.cliente.coches.add(coche);
+          Navigator.pop(context, coche);
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Datos del vehiculo'),
+        title: Text('Ingresa el vehiculo'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ListView(
           children: [
             Text(
-              'Dueño actual del carro:',
+              'Cliente: ${widget.cliente.nombre}',
               style: const TextStyle(
-                fontSize: 30,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
+              overflow: TextOverflow.visible,
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            Text(
-              widget.cliente.nombre,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Ingresa los datos el vehiculo ',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: const Text('Imagen del coche'),
+                        content: imagen != null
+                            ? Image.file(imagen!)
+                            : const Text('No hay imagen'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cerrar'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[400]!),
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.grey[300],
+                      image: imagen != null
+                          ? DecorationImage(
+                              image: FileImage(imagen!),
+                              fit: BoxFit.cover,
+                            )
+                          : null,
+                    ),
+                    child: imagen != null
+                        ? null
+                        : Icon(
+                            Icons.camera_alt_rounded,
+                            size: 70,
+                            color: Colors.grey[700],
+                          ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    children: [
+                      imagen == null
+                          ? const SizedBox()
+                          : Column(
+                              children: [
+                                SizedBox(
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      imagen = null;
+                                      imagenC.imagenX = null;
+                                      setState(() {});
+                                    },
+                                    child: const Text('Limpiar imagen'),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                              ],
+                            ),
+                      SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            imagenC.tomarImagen().then((value) {
+                              imagen = value;
+                              setState(() {});
+                            });
+                          },
+                          child: const Text('Tomar foto'),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            imagenC.imagenDeGaleria().then((value) {
+                              imagen = value;
+                              setState(() {});
+                            });
+                          },
+                          child: const Text(
+                            'Seleccionar foto de galeria',
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: Marca,
+              autofocus: true,
+              focusNode: marcaFocus,
+              onSubmitted: (value) {
+                FocusScope.of(context).requestFocus(modeloFocus);
+              },
+              controller: marca,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Marca',
               ),
             ),
             const SizedBox(height: 20),
-            TextField(
-              controller: Modelo,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Modelo',
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    focusNode: modeloFocus,
+                    onSubmitted: (value) {
+                      FocusScope.of(context).requestFocus(anioFocus);
+                    },
+                    controller: modelo,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Modelo',
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: TextField(
+                    focusNode: anioFocus,
+                    onSubmitted: (value) {
+                      FocusScope.of(context).requestFocus(motorFocus);
+                    },
+                    controller: anio,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Año',
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: Anio,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Año',
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: Motor,
+              focusNode: motorFocus,
+              onSubmitted: (value) {
+                FocusScope.of(context).requestFocus(vinFocus);
+              },
+              controller: motor,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Motor',
@@ -92,7 +252,11 @@ class _IngresarCarroState extends State<IngresarCarro> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: Vin,
+              focusNode: vinFocus,
+              onSubmitted: (value) {
+                FocusScope.of(context).requestFocus(kmFocus);
+              },
+              controller: vin,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Vin',
@@ -100,7 +264,11 @@ class _IngresarCarroState extends State<IngresarCarro> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: Km,
+              focusNode: kmFocus,
+              onSubmitted: (value) {
+                FocusScope.of(context).requestFocus(placasFocus);
+              },
+              controller: km,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Kilometraje',
@@ -108,31 +276,23 @@ class _IngresarCarroState extends State<IngresarCarro> {
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: Placas,
+              focusNode: placasFocus,
+              onSubmitted: (value) {
+                FocusScope.of(context).unfocus();
+                agregarCoche();
+              },
+              controller: placas,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Placas',
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Coche coche = Coche(
-                  marca: Marca.text,
-                  modelo: Modelo.text,
-                  anio: Anio.text,
-                  motor: Motor.text,
-                  vin: Vin.text,
-                  kilometraje: Km.text,
-                  placa: Placas.text,
-                );
-                Ccliente().agregarCocheACliente(widget.cliente, coche);
-                Navigator.pop(context);
-              },
-              child: const Text('Guardar'),
-            )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: agregarCoche,
+        child: const Icon(Icons.done),
       ),
     );
   }

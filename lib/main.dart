@@ -1,4 +1,5 @@
 import 'package:amecanico/2-Vista/Navegacion.dart';
+import 'package:amecanico/3-Controlador/ImagenC.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ void main() {
     ),
   );
   initFlutter();
+  ImagenC().iniciar();
   runApp(const MyApp());
 }
 
@@ -36,6 +38,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
         theme: ThemeData(
           primarySwatch: const MaterialColor(
             0xff2c3e50,

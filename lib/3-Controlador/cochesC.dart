@@ -15,6 +15,7 @@ class Ccoche {
     String vin,
     String kilometraje,
     String placa,
+    String imagen,
   ) {
     coches.put(
       vin,
@@ -26,6 +27,7 @@ class Ccoche {
         vin: vin,
         kilometraje: kilometraje,
         placa: placa,
+        imagen: imagen,
       ),
     );
   }
