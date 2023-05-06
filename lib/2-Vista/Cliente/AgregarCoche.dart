@@ -44,32 +44,35 @@ class _IngresarCarroState extends State<IngresarCarro> {
   }
 
   void agregarCoche() {
-    print('Aqui se guardara el coche  ');
+    imagenC.guardarImagen().then(
+      (value) {
+        print('path' + value.toString());
+        if (value != null) {
+          print(value.path);
 
-    imagenC.guardarImagen().then((value) {
-      if (value != null) {
-        Coche coche = Coche(
-          marca: marca.text,
-          modelo: modelo.text,
-          anio: anio.text,
-          motor: motor.text,
-          vin: vin.text,
-          kilometraje: km.text,
-          placa: placas.text,
-          imagen: value.path,
-        );
+          Coche coche = Coche(
+            marca: marca.text,
+            modelo: modelo.text,
+            anio: anio.text,
+            motor: motor.text,
+            vin: vin.text,
+            kilometraje: km.text,
+            placa: placas.text,
+            imagen: value.path,
+          );
 
-        if (widget.seGuardara) {
-          print('opcion 1');
-          Ccliente().agregarCocheACliente(widget.cliente, coche);
-          Navigator.pop(context);
-        } else {
-          print('opcion 2');
-          widget.cliente.coches.add(coche);
-          Navigator.pop(context, coche);
+          if (widget.seGuardara) {
+            print('opcion 1');
+            Ccliente().agregarCocheACliente(widget.cliente, coche);
+            Navigator.pop(context);
+          } else {
+            print('opcion 2');
+            widget.cliente.coches.add(coche);
+            Navigator.pop(context, coche);
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   @override

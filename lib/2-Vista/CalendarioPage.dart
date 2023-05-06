@@ -14,10 +14,25 @@ class _CalendarioPageState extends State<CalendarioPage> {
   bool init = true;
   String selected = 'Mes';
 
+  Color isDarkMode(BuildContext context) {
+    final theme = Theme.of(context);
+    if (theme.brightness == Brightness.dark) {
+      return Colors.deepOrangeAccent;
+    } else {
+      return Colors.white;
+    }
+  }
+
   Widget formatoSeleccionad(CitasC citasC) {
     switch (selected) {
       case 'Dia':
         return DayView(
+          headerStyle: HeaderStyle(
+            decoration: BoxDecoration(
+              color: isDarkMode(context),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
           heightPerMinute: 1.5,
           onDateTap: (date) {
             citasC.agregarCitaPorSeleccion(date);
@@ -84,6 +99,12 @@ class _CalendarioPageState extends State<CalendarioPage> {
         );
       case 'Semana':
         return WeekView(
+          headerStyle: HeaderStyle(
+            decoration: BoxDecoration(
+              color: isDarkMode(context),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
           width: MediaQuery.of(context).size.width,
           heightPerMinute: 2,
           onDateTap: (date) {
@@ -92,6 +113,11 @@ class _CalendarioPageState extends State<CalendarioPage> {
         );
       case 'Mes':
         return MonthView(
+          headerStyle: HeaderStyle(
+            decoration: BoxDecoration(
+              color: isDarkMode(context),
+            ),
+          ),
           onCellTap: (events, date) {
             print(date);
           },
@@ -128,7 +154,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                     defaultSelected: selected,
                     elevation: 0,
                     absoluteZeroSpacing: false,
-                    unSelectedColor: Colors.white,
+                    unSelectedColor: Colors.transparent,
                     buttonLables: const [
                       'Dia',
                       'Semana',
@@ -141,7 +167,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                     ],
                     buttonTextStyle: const ButtonTextStyle(
                       selectedColor: Colors.white,
-                      unSelectedColor: Colors.black,
+                      unSelectedColor: Colors.deepOrangeAccent,
                       textStyle: TextStyle(fontSize: 20),
                     ),
                     radioButtonValue: (value) {

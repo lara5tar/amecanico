@@ -12,12 +12,18 @@ class Cliente {
   String telefono;
   @HiveField(3)
   List<Coche> coches;
+  @HiveField(4)
+  String fechaCreacion = DateTime.now().toString();
+  @HiveField(5)
+  String fechaModificacion = DateTime.now().toString();
 
   Cliente({
     required this.nombre,
     required this.domicilio,
     required this.telefono,
     required this.coches,
+    this.fechaCreacion = '',
+    this.fechaModificacion = '',
   });
 
   // void partirPastel() {
@@ -56,6 +62,8 @@ class ClienteAdapter extends TypeAdapter<Cliente> {
       domicilio: reader.read(),
       telefono: reader.read(),
       coches: List<Coche>.from(reader.read()),
+      fechaCreacion: reader.read(),
+      fechaModificacion: reader.read(),
     );
   }
 
@@ -65,6 +73,8 @@ class ClienteAdapter extends TypeAdapter<Cliente> {
       ..write(obj.nombre)
       ..write(obj.domicilio)
       ..write(obj.telefono)
-      ..write(obj.coches);
+      ..write(obj.coches)
+      ..write(obj.fechaCreacion)
+      ..write(obj.fechaModificacion);
   }
 }

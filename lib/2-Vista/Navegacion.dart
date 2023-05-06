@@ -1,5 +1,5 @@
 import 'package:amecanico/2-Vista/CalendarioPage.dart';
-import 'package:amecanico/2-Vista/Cliente/NewSeleccionarCliente.dart';
+import 'package:amecanico/2-Vista/Reporte/NewSeleccionarCliente.dart';
 import 'package:amecanico/2-Vista/ClientePage.dart';
 import 'package:amecanico/2-Vista/InicioPage.dart';
 import 'package:amecanico/2-Vista/ReportePage.dart';
@@ -37,10 +37,15 @@ class _HomePageState extends State<HomePage> {
     'Clientes',
     'Calendario',
   ];
+
+  bool isDarkMode(BuildContext context) {
+    final theme = Theme.of(context);
+    return theme.brightness == Brightness.dark;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff3f0f0),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {},
@@ -87,6 +92,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: vistas[index],
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+        backgroundColor: isDarkMode(context) ? Colors.grey[900] : Colors.white,
         onTap: indexSeleccionado,
         //icons: botonesVistas,
         activeIndex: index,
@@ -108,6 +114,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton.large(
         onPressed: () {
+          print(isDarkMode(context).toString());
           Navigator.push(
             context,
             MaterialPageRoute(

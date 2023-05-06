@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:amecanico/1-Modelo/Cliente.dart';
 import 'package:amecanico/2-Vista/Cliente/AgregarCoche.dart';
+import 'package:amecanico/2-Vista/Reporte/Servicios.dart';
 import 'package:flutter/material.dart';
 import '../../1-Modelo/Coche.dart';
 import '../../3-Controlador/ImagenC.dart';
@@ -78,12 +79,14 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                           Icon(
                             Icons.car_crash_rounded,
                             size: 60,
+                            color: Colors.white,
                           ),
                           Text(
                             'AGREGAR COCHE',
                             style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -333,8 +336,18 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
       ),
       floatingActionButton: index != widget.cliente.coches.length
           ? FloatingActionButton(
-              onPressed: () {},
-              child: Icon(Icons.done),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrdenBotones(),
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.done,
+                color: Colors.white,
+              ),
             )
           : null,
     );
@@ -354,52 +367,89 @@ class _TarjetaCocheState extends State<TarjetaCoche> {
   File? imagen;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     imagenC.iniciar();
+    print(widget.coche);
     imagen = File(widget.coche.imagen);
-    print(widget.coche.imagen);
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 20),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(30),
-          image: widget.coche.imagen != ''
-              ? DecorationImage(
-                  image: FileImage(imagen!),
-                  fit: BoxFit.cover,
-                )
-              : null,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                'MARCA',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                widget.coche.marca.toUpperCase(),
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                overflow: TextOverflow.visible,
-              ),
-              Text(
-                'MODELO',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                widget.coche.modelo.toUpperCase(),
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                overflow: TextOverflow.visible,
-              ),
-            ],
+      child: GestureDetector(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: const Text('Imagen del coche'),
+              content: imagen != null
+                  ? Image.file(imagen!)
+                  : const Text('No hay imagen'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cerrar'),
+                ),
+              ],
+            ),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondary,
+            borderRadius: BorderRadius.circular(30),
+            image: imagen != null
+                ? DecorationImage(
+                    opacity: 0.8,
+                    image: FileImage(imagen!),
+                    fit: BoxFit.cover,
+                  )
+                : null,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  'MARCA',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  widget.coche.marca.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  overflow: TextOverflow.visible,
+                ),
+                Text(
+                  'MODELO',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  widget.coche.modelo.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  overflow: TextOverflow.visible,
+                ),
+              ],
+            ),
           ),
         ),
       ),

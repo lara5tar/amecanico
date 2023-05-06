@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,6 +9,7 @@ class ImagenC {
   XFile? imagenX;
 
   void iniciar() async {
+    Colors.indigo;
     final directory = await getExternalStorageDirectory();
     final path = directory!.path;
     imagenesCochesPath = Directory('$path/ImagenesCoches');
@@ -33,7 +35,8 @@ class ImagenC {
     );
 
     if (result == null) return null;
-    String ruta = '${imagenesCochesPath!.path}/${imagenX!.name}';
+    String ruta =
+        '${imagenesCochesPath!.path}/${DateTime.now().toString().replaceAll(' ', '')}';
     return await File(ruta).writeAsBytes(result);
   }
 
