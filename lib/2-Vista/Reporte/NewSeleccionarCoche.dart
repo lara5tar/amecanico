@@ -6,7 +6,6 @@ import 'package:amecanico/3-Controlador/reporteC.dart';
 import 'package:flutter/material.dart';
 import '../../1-Modelo/Coche.dart';
 import '../../3-Controlador/ImagenC.dart';
-import '../../3-Controlador/clientesC.dart';
 
 // ignore: must_be_immutable
 class NewSeleccionarCoche extends StatefulWidget {

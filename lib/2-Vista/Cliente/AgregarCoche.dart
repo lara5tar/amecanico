@@ -27,6 +27,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
   TextEditingController vin = TextEditingController();
   TextEditingController km = TextEditingController();
   TextEditingController placas = TextEditingController();
+  TextEditingController color = TextEditingController();
 
   FocusNode marcaFocus = FocusNode();
   FocusNode modeloFocus = FocusNode();
@@ -35,6 +36,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
   FocusNode vinFocus = FocusNode();
   FocusNode kmFocus = FocusNode();
   FocusNode placasFocus = FocusNode();
+  FocusNode colorFocus = FocusNode();
 
   @override
   void initState() {
@@ -79,6 +81,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
           kilometraje: km.text,
           placa: placas.text,
           imagen: value == null ? '' : value.path,
+          color: color.text,
         );
 
         if (widget.seGuardara) {
@@ -300,13 +303,26 @@ class _IngresarCarroState extends State<IngresarCarro> {
             TextField(
               focusNode: placasFocus,
               onSubmitted: (value) {
-                FocusScope.of(context).unfocus();
-                agregarCoche();
+                FocusScope.of(context).requestFocus(colorFocus);
+                // agregarCoche();
               },
               controller: placas,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Placas',
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              onSubmitted: (value) {
+                agregarCoche();
+                FocusScope.of(context).unfocus();
+              },
+              focusNode: colorFocus,
+              controller: color,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Color',
               ),
             ),
           ],

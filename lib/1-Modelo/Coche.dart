@@ -19,10 +19,9 @@ class Coche {
   @HiveField(7)
   String imagen;
   @HiveField(8)
-  String fechaCreacion = DateTime.now().toString();
+  String color;
   @HiveField(9)
-  String fechaModificacion = DateTime.now().toString();
-  //color
+  bool seleccionado = false;
 
   Coche({
     required this.marca,
@@ -33,13 +32,12 @@ class Coche {
     required this.kilometraje,
     required this.placa,
     required this.imagen,
-    this.fechaCreacion = '',
-    this.fechaModificacion = '',
+    required this.color,
   });
 
   @override
   String toString() =>
-      'Coche(marca: $marca, modelo: $modelo, anio: $anio, motor: $motor, vin: $vin, kilometraje: $kilometraje, placa: $placa, imagen: $imagen, fechaCreacion: $fechaCreacion, fechaModificacion: $fechaModificacion)';
+      'marca: $marca, modelo: $modelo, anio: $anio, motor: $motor, vin: $vin, kilometraje: $kilometraje, placa: $placa, imagen: $imagen';
 }
 
 class CocheAdapter extends TypeAdapter<Coche> {
@@ -57,8 +55,7 @@ class CocheAdapter extends TypeAdapter<Coche> {
       kilometraje: reader.read(),
       placa: reader.read(),
       imagen: reader.read(),
-      fechaCreacion: reader.read(),
-      fechaModificacion: reader.read(),
+      color: reader.read(),
     );
   }
 
@@ -73,7 +70,6 @@ class CocheAdapter extends TypeAdapter<Coche> {
       ..write(obj.kilometraje)
       ..write(obj.placa)
       ..write(obj.imagen)
-      ..write(obj.fechaCreacion)
-      ..write(obj.fechaModificacion);
+      ..write(obj.color);
   }
 }

@@ -20,7 +20,7 @@ class Cliente {
   @HiveField(6)
   String id = '';
   @HiveField(7)
-  int contador = 0;
+  static int contador = 0;
 
   Cliente({
     required this.nombre,

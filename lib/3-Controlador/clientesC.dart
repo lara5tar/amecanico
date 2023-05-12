@@ -63,7 +63,7 @@ class Ccliente {
       return 'El nombre ya existe';
     }
 
-    Cliente cliente = Cliente(
+    var cliente = Cliente(
       nombre: nombre.text,
       domicilio: domicilio.text == '' ? 'Sin domicilio' : domicilio.text,
       telefono: telefono.text == '' ? 'Sin telefono' : telefono.text,

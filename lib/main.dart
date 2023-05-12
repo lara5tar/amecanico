@@ -5,7 +5,6 @@ import 'package:amecanico/1-Modelo/Reporte.dart';
 import 'package:amecanico/1-Modelo/Seccion.dart';
 import 'package:amecanico/1-Modelo/Servicios.dart';
 import 'package:amecanico/3-Controlador/ImagenC.dart';
-import 'package:amecanico/Test/llamada.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -76,6 +75,10 @@ initFlutter() async {
   var reportes = await Hive.openBox<Reporte>('plantillas');
 
   // clientes.addAll(clienteS());
+
+  // for (Cliente cliente in clienteS()) {
+  //   clientes.put(cliente.id, cliente);
+  // }
 
   await Hive.openBox('mensajes');
 
@@ -222,6 +225,7 @@ clienteS() {
           imagen: '',
           vin: '2C3KA53G85H678901',
           anio: '2008',
+          color: 'Azul',
         ),
       ],
     ),
@@ -239,6 +243,7 @@ clienteS() {
           imagen: '',
           vin: '1HGCM82633A123456',
           anio: '2010',
+          color: 'Rojo',
         ),
         Coche(
           placa: 'GHI-9012',
@@ -249,6 +254,7 @@ clienteS() {
           imagen: '',
           vin: '3VWST7AJ8FM123456',
           anio: '2015',
+          color: 'Blanco',
         ),
         Coche(
           placa: 'JKL-3456',
@@ -259,6 +265,7 @@ clienteS() {
           imagen: '',
           vin: 'JA4JT21H4CP678901',
           anio: '2012',
+          color: 'Rojo',
         ),
       ],
     ),
@@ -276,6 +283,7 @@ clienteS() {
           imagen: '',
           vin: '1C4RJFAG3FC234567',
           anio: '2014',
+          color: 'Rojo',
         ),
         Coche(
           placa: 'PQR-2345',
@@ -286,6 +294,7 @@ clienteS() {
           imagen: '',
           vin: 'KMHDU4AD2AU901234',
           anio: '2015',
+          color: 'Blanco',
         ),
       ],
     ),
@@ -303,6 +312,7 @@ clienteS() {
           imagen: '',
           vin: '5FNRL5H64EB456789',
           anio: '2013',
+          color: 'Azul',
         ),
         Coche(
           placa: 'VWX-0123',
@@ -313,6 +323,7 @@ clienteS() {
           imagen: '',
           vin: '1G1JC5442G7890123',
           anio: '2014',
+          color: 'Blanco',
         ),
       ],
     ),
@@ -330,6 +341,7 @@ clienteS() {
           imagen: '',
           vin: '1NXBR32E35Z567890',
           anio: '2014',
+          color: 'Rojo',
         ),
         Coche(
           placa: 'BCD-8901',
@@ -340,6 +352,7 @@ clienteS() {
           imagen: '',
           vin: 'JA32U2FU1DU234567',
           anio: '2004',
+          color: 'Blanco',
         ),
         Coche(
           placa: 'ABC-123',
@@ -350,6 +363,7 @@ clienteS() {
           imagen: '',
           vin: '1HGCM82633A123456',
           anio: '2016',
+          color: 'Rojo',
         ),
       ],
     ),
@@ -367,6 +381,7 @@ clienteS() {
           imagen: '',
           vin: '2C3KA53G85H678901',
           anio: '2013',
+          color: 'Blanco',
         ),
       ],
     ),
@@ -384,6 +399,7 @@ clienteS() {
           imagen: '',
           vin: '3VWST7AJ8FM123456',
           anio: '2020',
+          color: 'Rojo',
         ),
         Coche(
           placa: 'JKL-012',
@@ -394,6 +410,7 @@ clienteS() {
           imagen: '',
           vin: 'JA4JT21H4CP678901',
           anio: '2003',
+          color: 'Blanco',
         ),
       ],
     ),
@@ -411,6 +428,7 @@ clienteS() {
           imagen: '',
           vin: '1C4RJFAG3FC234567',
           anio: '2005',
+          color: 'Rojo',
         ),
         Coche(
           placa: 'PQR-678',
@@ -421,6 +439,7 @@ clienteS() {
           imagen: '',
           vin: 'KMHDU4AD2AU901234',
           anio: '2006',
+          color: 'Blanco',
         ),
       ],
     ),
@@ -438,6 +457,7 @@ clienteS() {
           imagen: '',
           vin: '1G1JC5442G7890123',
           anio: '2009',
+          color: 'Rojo',
         ),
       ],
     ),
@@ -455,6 +475,7 @@ clienteS() {
           imagen: '',
           vin: '1NXBR32E35Z567890',
           anio: '2010',
+          color: 'Blanco',
         ),
         Coche(
           placa: 'BCD-890',
@@ -465,6 +486,7 @@ clienteS() {
           imagen: '',
           vin: 'JA32U2FU1DU234567',
           anio: '2014',
+          color: 'Rojo',
         ),
         Coche(
           placa: 'STU-901',
@@ -475,6 +497,7 @@ clienteS() {
           imagen: '',
           vin: '5FNRL5H64EB456789',
           anio: '2008',
+          color: 'Blanco',
         ),
       ],
     ),

@@ -315,39 +315,35 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
           SizedBox(
             height: 50,
             child: OutlinedButton(
-              onPressed: () {
-                //aqui no se guarda el cliente en hive, pero se guarda el nombre y telefono en el formulario
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NewSeleccionarCoche(
-                      cliente: Cliente(
-                        coches: [],
-                        nombre: cNombreNuevo.text,
-                        domicilio: cDomicilioNuevo.text,
-                        telefono: cTelefonoNuevo.text,
-                      ),
-                      seGuardara: false,
-                      plantilla: widget.plantilla,
-                    ),
-                  ),
-                ).then((value) => setState(() {
-                      cNombreNuevo.clear();
-                      cDomicilioNuevo.clear();
-                      cTelefonoNuevo.clear();
-                      cDomicilioBuscar.clear();
-                      cTelefonoBuscar.clear();
-                      cNombreBuscar.clear();
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    }));
-              },
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text('No guardar'), Text('y continuar')],
-              ),
-            ),
+                onPressed: () {
+                  //aqui no se guarda el cliente en hive, pero se guarda el nombre y telefono en el formulario
+                  Navigator.pop(context);
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => NewSeleccionarCoche(
+                  //       cliente: Cliente(
+                  //         coches: [],
+                  //         nombre: cNombreNuevo.text,
+                  //         domicilio: cDomicilioNuevo.text,
+                  //         telefono: cTelefonoNuevo.text,
+                  //       ),
+                  //       seGuardara: true,
+                  //       plantilla: widget.plantilla,
+                  //     ),
+                  //   ),
+                  // ).then((value) => setState(() {
+                  //       cNombreNuevo.clear();
+                  //       cDomicilioNuevo.clear();
+                  //       cTelefonoNuevo.clear();
+                  //       cDomicilioBuscar.clear();
+                  //       cTelefonoBuscar.clear();
+                  //       cNombreBuscar.clear();
+                  //       Navigator.pop(context);
+                  //       Navigator.pop(context);
+                  //     }));
+                },
+                child: Text('Cancelar')),
           ),
           SizedBox(
             height: 50,
@@ -385,10 +381,7 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
                       }));
                 }
               },
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text('Guardar'), Text('y continuar')],
-              ),
+              child: Text('Aceptar'),
             ),
           ),
         ],
