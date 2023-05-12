@@ -59,11 +59,15 @@ class _CustomListTileState extends State<CustomListTile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.cliente.nombre,
-                        style: const TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 140,
+                        child: Text(
+                          widget.cliente.nombre,
+                          style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 5),

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../3-Controlador/ControladorCitas.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 
-class CalendarioPage extends StatefulWidget {
-  const CalendarioPage({super.key});
+class Cp extends StatefulWidget {
+  const Cp({super.key});
 
   @override
-  State<CalendarioPage> createState() => _CalendarioPageState();
+  State<Cp> createState() => _CpState();
 }
 
-class _CalendarioPageState extends State<CalendarioPage> {
+class _CpState extends State<Cp> {
   bool init = true;
   String selected = 'Mes';
 

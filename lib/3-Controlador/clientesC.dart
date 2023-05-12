@@ -47,55 +47,36 @@ class Ccliente {
 
   void agregarCocheACliente(Cliente cliente, Coche coche) {
     cliente.coches.add(coche);
-    clientes.put(cliente.telefono, cliente);
+    clientes.put(cliente.id, cliente);
   }
 
-  String agregarCliente(nombre, domicilio, TextEditingController telefono) {
-    print('entro');
-    if (telefono.text.length != 16) return 'El telefono debe tener 10 digitos';
-    if (telefono.text == '' || nombre.text == '')
-      return 'Faltan campos por llenar';
+  Cliente? cliente;
 
-    if (clientes.containsKey(telefono.text)) return 'El telefono ya existe';
+  String agregarCliente(nombre, domicilio, TextEditingController telefono) {
+    // if (telefono.text.length != 16) return 'El telefono debe tener 10 digitos';
+    if (nombre.text == '') return 'Faltan campos por llenar';
+
+    // if (listClientes.any((element) => element.telefono == telefono.text))
+    //   return 'El telefono ya existe';
 
     if (listClientes.any((element) => element.nombre == nombre.text)) {
       return 'El nombre ya existe';
     }
 
-    clientes.put(
-      telefono.text,
-      Cliente(
-        nombre: nombre.text,
-        domicilio: domicilio.text == '' ? 'Sin domicilio' : domicilio.text,
-        telefono: telefono.text,
-        coches: [],
-      ),
+    Cliente cliente = Cliente(
+      nombre: nombre.text,
+      domicilio: domicilio.text == '' ? 'Sin domicilio' : domicilio.text,
+      telefono: telefono.text == '' ? 'Sin telefono' : telefono.text,
+      coches: [],
     );
+
+    this.cliente = cliente;
+
+    clientes.put(cliente.id, cliente);
     return 'agregado';
   }
 
-  void editarCliente(
-      String nombre, String domicilio, String telefono, List<Coche> coches) {
-    clientes.put(
-      nombre,
-      Cliente(
-        nombre: nombre,
-        domicilio: domicilio,
-        telefono: telefono,
-        coches: coches,
-      ),
-    );
-  }
-
-  void eliminarClienteIndex(int index) {
-    clientes.deleteAt(index);
-  }
-
-  void eliminarClienteNombre(String nombre) {
-    clientes.delete(nombre);
-  }
-
-  void eliminarCliente(Cliente cliente) {
-    clientes.delete(cliente.nombre);
+  guardarCambios(Cliente cliente) {
+    clientes.put(cliente.id, cliente);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:amecanico/main.dart';
 import 'package:hive/hive.dart';
 
 import 'Coche.dart';
@@ -16,6 +17,10 @@ class Cliente {
   String fechaCreacion = DateTime.now().toString();
   @HiveField(5)
   String fechaModificacion = DateTime.now().toString();
+  @HiveField(6)
+  String id = '';
+  @HiveField(7)
+  int contador = 0;
 
   Cliente({
     required this.nombre,
@@ -24,26 +29,10 @@ class Cliente {
     required this.coches,
     this.fechaCreacion = '',
     this.fechaModificacion = '',
-  });
-
-  // void partirPastel() {
-  //   print('Se partio el pastel en 8');
-  // }
-
-  // void partirPastelPorNumero(int partes) {
-  //   print('Se partio el pastel en' + partes.toString() + 'partes');
-  // }
-
-  // String partirPastelyDar() {
-  //   print('Se partio el pastel en 8 partes');
-
-  //   return 'Jesus';
-  // }
-
-  // String partirPastelyDarPorNumeroyNombre(int partes, String nombre) {
-  //   print('Se partio el pastel en ' + partes.toString() + 'partes');
-  //   return nombre;
-  // }
+  }) {
+    contador = contador + 1;
+    id = generateCode(contador.toString()) + contador.toString();
+  }
 
   @override
   String toString() =>
@@ -52,7 +41,6 @@ class Cliente {
 
 class ClienteAdapter extends TypeAdapter<Cliente> {
   @override
-  // int get typeId => 0;
   final typeId = 0;
 
   @override

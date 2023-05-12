@@ -1,18 +1,25 @@
 import 'dart:io';
 import 'package:amecanico/1-Modelo/Cliente.dart';
+import 'package:amecanico/1-Modelo/Reporte.dart';
 import 'package:amecanico/2-Vista/Cliente/AgregarCoche.dart';
-import 'package:amecanico/2-Vista/Reporte/Servicios.dart';
+import 'package:amecanico/3-Controlador/reporteC.dart';
 import 'package:flutter/material.dart';
 import '../../1-Modelo/Coche.dart';
 import '../../3-Controlador/ImagenC.dart';
+import '../../3-Controlador/clientesC.dart';
 
 // ignore: must_be_immutable
 class NewSeleccionarCoche extends StatefulWidget {
   final Cliente cliente;
   final bool seGuardara;
+  final Reporte plantilla;
 
-  const NewSeleccionarCoche(
-      {super.key, required this.cliente, required this.seGuardara});
+  const NewSeleccionarCoche({
+    super.key,
+    required this.cliente,
+    required this.seGuardara,
+    required this.plantilla,
+  });
 
   @override
   State<NewSeleccionarCoche> createState() => _NewSeleccionarCocheState();
@@ -24,7 +31,7 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Seleccionar Cliente'),
+        title: const Text('Seleccionar Coche'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -63,6 +70,7 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                               i++) {
                             print(widget.cliente.coches[i].marca);
                           }
+                          // Ccliente().guardarCambios(widget.cliente);
                         }
                         setState(() {});
                       });
@@ -148,26 +156,6 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                         ? const SizedBox()
                         : Column(
                             children: [
-                              ListTile(
-                                title: Text(
-                                  widget.cliente.coches[index].marca
-                                      .toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  'MARCA',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              const Divider(
-                                thickness: 2,
-                              ),
                               ListTile(
                                 title: Text(
                                   widget.cliente.coches[index].marca
@@ -335,18 +323,33 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
         ),
       ),
       floatingActionButton: index != widget.cliente.coches.length
-          ? FloatingActionButton(
+          ? FloatingActionButton.extended(
               onPressed: () {
+                ReporteC controlador = ReporteC(reporte: widget.plantilla);
+                controlador.crearReporteBorrador(
+                    widget.cliente, widget.cliente.coches[index]);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OrdenBotones(),
-                  ),
-                );
+                      builder: (context) =>
+                          controlador.reporte!.construirWidget(false)),
+                ).then((value) => setState(() {
+                      Navigator.pop(context);
+                    }));
               },
-              child: Icon(
-                Icons.done,
-                color: Colors.white,
+              label: const Row(
+                children: [
+                  Text(
+                    'Seguir',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                  SizedBox(width: 10),
+                  Icon(
+                    Icons.arrow_forward,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ],
               ),
             )
           : null,
@@ -368,9 +371,10 @@ class _TarjetaCocheState extends State<TarjetaCoche> {
   @override
   void initState() {
     super.initState();
+    print('object');
     imagenC.iniciar();
     print(widget.coche);
-    imagen = File(widget.coche.imagen);
+    imagen = widget.coche.imagen.isEmpty ? null : File(widget.coche.imagen);
   }
 
   @override

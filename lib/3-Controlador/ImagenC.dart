@@ -19,7 +19,6 @@ class ImagenC {
   }
 
   Future<File?> getImage(String nombre) async {
-    //final path = '${imagenesCochesPath!.path}/$nombre';
     File imagen = File(nombre);
     if (await imagen.exists()) {
       return imagen;

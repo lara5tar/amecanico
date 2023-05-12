@@ -1,9 +1,11 @@
-import 'package:amecanico/1-Modelo/Campo.dart';
+import 'dart:async';
+
 import 'package:amecanico/1-Modelo/Reporte.dart';
-import 'package:amecanico/1-Modelo/Seccion.dart';
+import 'package:amecanico/3-Controlador/reporteC.dart';
 import 'package:flutter/material.dart';
 
-import '../1-Modelo/Servicios.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class PruebaReporte extends StatefulWidget {
   const PruebaReporte({super.key});
@@ -17,132 +19,66 @@ class _PruebaReporteState extends State<PruebaReporte> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Prueba Reporte'),
+        title: Text('Prueba re'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Reporte(
-              fecha: '04-05-2023',
-              hora: '12:00',
-              nombreCliente: 'Amando',
-              telefonoCliente: '8885858585858',
-              domicilioCliente: 'Domicilio x',
-              coche: 'coche',
-              imagenes: [],
-              servicios: [
-                Servicio(
-                  titulo: 'Afinacion',
-                  secciones: [
-                    Seccion(
-                      titulo: 'Cambio de Aceite',
-                      subSecciones: [
-                        SubSeccion(
-                          subtitulo: 'Filtro',
-                          campos: [
-                            Campo(
-                              tipo: 'text',
-                              opciones: ['tiene tal cosa?'],
-                              entradas: [],
+            FutureBuilder(
+              builder: (context, reporteC) {
+                if (reporteC.hasData) {
+                  return Column(
+                    children: [
+                      Text(reporteC.data!.reportes.length.toString()),
+                      ...reporteC.data!.listReportes
+                          .map(
+                            (e) => ElevatedButton(
+                              onPressed: () {
+                                //
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return Scaffold(
+                                        appBar: AppBar(
+                                          title: Text('Reporte'),
+                                        ),
+                                        body: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              e.construirWidget(false),
+                                              const SizedBox(height: 20)
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                                //
+                              },
+                              child: Text(e.fecha),
                             ),
-                            Campo(
-                              tipo: 'text',
-                              opciones: ['tiene tal cosa?'],
-                              entradas: [],
-                            ),
-                          ],
-                        ),
-                        SubSeccion(
-                          subtitulo: 'Filtro',
-                          campos: [
-                            Campo(
-                              tipo: 'radio',
-                              opciones: ['1'],
-                              entradas: ['done', 'close', 'f/s'],
-                            ),
-                            Campo(
-                              tipo: 'text',
-                              opciones: ['observacion'],
-                              entradas: ['done', 'close', 'f/s'],
-                            ),
-                          ],
-                        ),
-                        SubSeccion(
-                          subtitulo: 'Anticongelante',
-                          campos: [
-                            Campo(
-                              tipo: 'check',
-                              opciones: ['4', '6'],
-                              entradas: ['done', 'close', 'f/s'],
-                            )
-                          ],
-                        ),
-                        SubSeccion(
-                          subtitulo: 'Anticongelante',
-                          campos: [
-                            Campo(
-                              tipo: 'check',
-                              opciones: ['4', '6'],
-                              entradas: ['done', 'close', 'f/s'],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    Seccion(
-                      titulo: 'Cambio de Frenos',
-                      subSecciones: [
-                        SubSeccion(
-                          subtitulo: 'Filtro',
-                          campos: [
-                            Campo(
-                              tipo: 'check',
-                              opciones: ['4', '6'],
-                              entradas: ['done', 'close', 'f/s'],
-                            )
-                          ],
-                        ),
-                        SubSeccion(
-                          subtitulo: 'Cambio de Llantas',
-                          campos: [
-                            Campo(
-                              tipo: 'radio',
-                              opciones: ['4', '6'],
-                              entradas: ['done', 'close', 'f/s'],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Servicio(
-                  titulo: 'Frenos',
-                  secciones: [
-                    Seccion(
-                      titulo: 'Cambio de Aceite',
-                      subSecciones: [
-                        SubSeccion(subtitulo: 'Filtro', campos: []),
-                        SubSeccion(subtitulo: 'Liquido', campos: [])
-                      ],
-                    ),
-                    Seccion(
-                      titulo: 'Cambio de Frenos',
-                      subSecciones: [
-                        SubSeccion(subtitulo: 'Filtro', campos: [
-                          Campo(
-                            tipo: 'seleccion',
-                            opciones: [],
-                            entradas: [],
                           )
-                        ]),
-                        SubSeccion(subtitulo: 'Liquido', campos: [])
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ).construirWidget()
+                          .toList(),
+                    ],
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      CircularProgressIndicator(
+                        color: Colors.red,
+                        semanticsLabel: 'Loading',
+                        semanticsValue: 'Loading',
+                      ),
+                    ],
+                  );
+                }
+              },
+              future: Future.delayed(Duration(seconds: 3), () {
+                return ReporteC();
+              }),
+            ),
           ],
         ),
       ),
@@ -150,11 +86,11 @@ class _PruebaReporteState extends State<PruebaReporte> {
   }
 }
 // fecha: DateTime.now().day.toString() +
-              //     '/' +
-              //     DateTime.now().month.toString() +
-              //     '/' +
-              //     DateTime.now().year.toString(),
-              // hora: DateTime.now().hour.toString() +
-              //     ':' +
-              //     DateTime.now().minute.toString() +
-              //     ' ',
+//     '/' +
+//     DateTime.now().month.toString() +
+//     '/' +
+//     DateTime.now().year.toString(),
+// hora: DateTime.now().hour.toString() +
+//     ':' +
+//     DateTime.now().minute.toString() +
+//     ' ',

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../1-Modelo/Cliente.dart';
 import '../3-Controlador/clientesC.dart';
 import '../4-Librerias/CustomListTile.dart';
+import 'Cliente/VerClientes.dart';
 
 class ClientePage extends StatefulWidget {
   const ClientePage({super.key});
@@ -16,10 +17,18 @@ class _ClientePageState extends State<ClientePage> {
   late List<List<Cliente>> listaclientes;
   bool estaBuscando = false;
 
+  Color isDarkMode(BuildContext context) {
+    final theme = Theme.of(context);
+    if (theme.brightness == Brightness.dark) {
+      return Colors.grey[900]!;
+    } else {
+      return Colors.grey[300]!;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-
     listaclientes = cclientes.listClientesOrdenadosPorLetra;
   }
 
@@ -27,57 +36,7 @@ class _ClientePageState extends State<ClientePage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  readOnly: true,
-                  onTap: () {
-                    setState(() {
-                      estaBuscando = true;
-                    });
-                  },
-                  onTapOutside: (event) {
-                    setState(() {
-                      estaBuscando = false;
-                      FocusScope.of(context).unfocus();
-                    });
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      listaclientes = cclientes.listClientesOrdenadosPorLetra;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: 'Buscar',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              AnimatedContainer(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                  color: estaBuscando ? Colors.red : Colors.transparent,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                duration: const Duration(milliseconds: 400),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.close),
-                ),
-              ),
-            ],
-          ),
-        ),
+        const SizedBox(height: 10),
         Expanded(
           child: Container(
             decoration: BoxDecoration(
@@ -86,6 +45,9 @@ class _ClientePageState extends State<ClientePage> {
             ),
             child: ListView(
               children: [
+                cclientes.clientes.length == 0
+                    ? Center(child: Text('No hay clientes'))
+                    : SizedBox(),
                 for (var clientesletra in listaclientes)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,14 +57,15 @@ class _ClientePageState extends State<ClientePage> {
                           padding: const EdgeInsets.all(10.0),
                           child: Text(
                             clientesletra[0].nombre.substring(0, 1),
-                            style: const TextStyle(
-                                fontSize: 30, color: Colors.black54),
+                            style: TextStyle(
+                              fontSize: 30,
+                            ),
                           ),
                         ),
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: isDarkMode(context),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Column(
@@ -114,11 +77,15 @@ class _ClientePageState extends State<ClientePage> {
                                   CustomListTile(
                                     esSeleccionado: false,
                                     onTap: () {
-                                      // Navigator.pushNamed(
-                                      //   context,
-                                      //   '/coche',
-                                      //   arguments: clientesletra[i],
-                                      // );
+                                      print(clientesletra[i]);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => VerCliente(
+                                            cliente: clientesletra[i],
+                                          ),
+                                        ),
+                                      );
                                     },
                                     cliente: clientesletra[i],
                                     esUltimo: false,
@@ -128,12 +95,16 @@ class _ClientePageState extends State<ClientePage> {
                             CustomListTile(
                               esSeleccionado: false,
                               onTap: () {
-                                // Navigator.pushNamed(
-                                //   context,
-                                //   '/coche',
-                                //   arguments:
-                                //       clientesletra[clientesletra.length - 1],
-                                // );
+                                print(clientesletra[clientesletra.length - 1]);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => VerCliente(
+                                      cliente: clientesletra[
+                                          clientesletra.length - 1],
+                                    ),
+                                  ),
+                                );
                               },
                               cliente: clientesletra[clientesletra.length - 1],
                               esUltimo: true,
@@ -143,6 +114,7 @@ class _ClientePageState extends State<ClientePage> {
                       ),
                     ],
                   ),
+                const SizedBox(height: 60),
               ],
             ),
           ),

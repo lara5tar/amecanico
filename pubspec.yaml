@@ -48,6 +48,8 @@ dependencies:
   pdf: ^3.10.1
   printing: ^5.10.3
   camera: ^0.10.5
+  url_launcher: ^6.1.11
+  intl: ^0.18.1
 
 
 dev_dependencies:

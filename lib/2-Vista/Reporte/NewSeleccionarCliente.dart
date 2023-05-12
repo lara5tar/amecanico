@@ -1,3 +1,4 @@
+import 'package:amecanico/1-Modelo/Reporte.dart';
 import 'package:amecanico/2-Vista/Reporte/NewSeleccionarCoche.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,8 @@ import '../../1-Modelo/Cliente.dart';
 import '../../3-Controlador/clientesC.dart';
 
 class NewSeleccionarCliente extends StatefulWidget {
-  const NewSeleccionarCliente({super.key});
+  final Reporte plantilla;
+  const NewSeleccionarCliente({super.key, required this.plantilla});
 
   @override
   State<NewSeleccionarCliente> createState() => _NewSeleccionarClienteState();
@@ -29,36 +31,6 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
   TextEditingController cTelefonoNuevo = TextEditingController();
 
   String _previousText = '';
-
-  @override
-  void initState() {
-    super.initState();
-    // cNombreBuscar.addListener(() {
-    //   final currentText = cNombreBuscar.text;
-    //   if (currentText.length < _previousText.length) {}
-    //   _previousText = currentText;
-    //   setState(() {});
-    // });
-
-    // cTelefonoNuevo.addListener(() {
-    //   final currentText = cTelefonoBuscar.text;
-    //   if (currentText.length < _previousText.length) {
-    //     estaBorrando = true;
-    //     print('entro');
-    //   } else {
-    //     print('object');
-    //     if (cTelefonoNuevo.text.length == 3) {
-    //       cTelefonoNuevo.text = '${cTelefonoNuevo.text} - ';
-    //     }
-    //     if (cTelefonoNuevo.text.length == 9) {
-    //       cTelefonoNuevo.text = '${cTelefonoNuevo.text} - ';
-    //     }
-    //   }
-    //   print(estaBorrando.toString());
-    //   _previousText = currentText;
-    //   setState(() {});
-    // });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +170,6 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
             ),
             const SizedBox(height: 20),
             TextField(
-              maxLength: 16,
               keyboardType: TextInputType.number,
               readOnly: opcion == 'Buscar' ? true : false,
               controller: opcion == 'Buscar' ? cTelefonoBuscar : cTelefonoNuevo,
@@ -207,8 +178,9 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
                   fontSize: 20,
                 ),
                 border: const OutlineInputBorder(),
-                labelText: opcion == 'Buscar' ? 'Telefono' : 'Telefono*',
+                labelText: opcion == 'Buscar' ? 'Telefono' : 'Telefono',
               ),
+              maxLength: 16,
               onChanged: (value) {
                 x++;
                 final currentText = value;
@@ -253,14 +225,12 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
         child: FloatingActionButton.extended(
           onPressed: () {
             if (opcion == 'Nuevo') {
-              if (cNombreNuevo.text.isNotEmpty ||
-                  cTelefonoNuevo.text.isNotEmpty) {
+              if (cNombreNuevo.text.isNotEmpty) {
                 dialogo(context);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text(
-                        'Por favor ingrese el nombre y el telefono del cliente.'),
+                    content: Text('Por favor ingrese el nombre del cliente.'),
                     duration: Duration(seconds: 2),
                   ),
                 );
@@ -281,9 +251,18 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
                     builder: (context) => NewSeleccionarCoche(
                       cliente: seleccionado!,
                       seGuardara: true,
+                      plantilla: widget.plantilla,
                     ),
                   ),
-                );
+                ).then((value) => setState(() {
+                      cNombreNuevo.clear();
+                      cDomicilioNuevo.clear();
+                      cTelefonoNuevo.clear();
+                      cDomicilioBuscar.clear();
+                      cTelefonoBuscar.clear();
+                      cNombreBuscar.clear();
+                      Navigator.pop(context);
+                    }));
               }
             }
           },
@@ -326,7 +305,7 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
         content: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(
-            '¿Desea guardar el cliente ${cNombreNuevo.text} con numero de telefono ${cTelefonoNuevo.text}?',
+            '¿Desea guardar el cliente ${cNombreNuevo.text}?',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20),
           ),
@@ -350,9 +329,19 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
                         telefono: cTelefonoNuevo.text,
                       ),
                       seGuardara: false,
+                      plantilla: widget.plantilla,
                     ),
                   ),
-                );
+                ).then((value) => setState(() {
+                      cNombreNuevo.clear();
+                      cDomicilioNuevo.clear();
+                      cTelefonoNuevo.clear();
+                      cDomicilioBuscar.clear();
+                      cTelefonoBuscar.clear();
+                      cNombreBuscar.clear();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }));
               },
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -379,11 +368,21 @@ class _NewSeleccionarClienteState extends State<NewSeleccionarCliente> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => NewSeleccionarCoche(
-                        cliente: cclientes.listClientes.last,
+                        cliente: cclientes.cliente!,
                         seGuardara: true,
+                        plantilla: widget.plantilla,
                       ),
                     ),
-                  );
+                  ).then((value) => setState(() {
+                        cNombreNuevo.clear();
+                        cDomicilioNuevo.clear();
+                        cTelefonoNuevo.clear();
+                        cDomicilioBuscar.clear();
+                        cTelefonoBuscar.clear();
+                        cNombreBuscar.clear();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }));
                 }
               },
               child: const Column(

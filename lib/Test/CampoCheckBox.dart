@@ -4,15 +4,17 @@ import 'package:group_button/group_button.dart';
 class CampoCheckBox extends StatefulWidget {
   final List<String> opciones;
   final List<String> entradas;
-  final ValueChanged<List<String>> alSeleccionarOpciones;
-  final ValueChanged<List<String>> alSeleccionarEntradas;
+  final ValueChanged<Map<String, String>> alSeleccionarRespuestas;
+  final Map<String, String> respuestas;
+  final bool finalizado;
 
   const CampoCheckBox({
     super.key,
     required this.opciones,
     required this.entradas,
-    required this.alSeleccionarEntradas,
-    required this.alSeleccionarOpciones,
+    required this.alSeleccionarRespuestas,
+    required this.respuestas,
+    required this.finalizado,
   });
 
   @override
@@ -21,7 +23,30 @@ class CampoCheckBox extends StatefulWidget {
 
 class _CampoCheckBoxState extends State<CampoCheckBox> {
   List<String> respuestasEntradas = [];
-  String respuesta = '';
+  Map<String, String> opcionesEntradasMap = {};
+  List<GroupButtonController> controllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    opcionesEntradasMap = widget.respuestas;
+    respuestasEntradas = widget.respuestas.keys.toList();
+    controllers = List.generate(
+      widget.opciones.length,
+      (index) => GroupButtonController(),
+    );
+    for (int i = 0; i < controllers.length; i++) {
+      //entra si existe respuesta en el indice de la opcion
+      if (widget.respuestas.keys.toList().contains(widget.opciones[i])) {
+        //selecciona el indice de la opcion en el controlador
+        controllers[i].selectIndex(
+            widget.entradas.indexOf(widget.respuestas[widget.opciones[i]]!));
+        if (widget.finalizado) {
+          controllers[i].disableIndexes([0, 1, 2]);
+        }
+      }
+    }
+  }
 
   Widget seleccionado(String seleccionado, bool selected, bool bool) {
     if (seleccionado.contains('done')) {
@@ -70,83 +95,93 @@ class _CampoCheckBoxState extends State<CampoCheckBox> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ...widget.opciones.map(
-            (opcion) => AnimatedContainer(
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.only(top: 10, bottom: 10),
-              duration: const Duration(milliseconds: 200),
-              decoration: BoxDecoration(
-                color: Colors.grey[800],
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[800],
-                      borderRadius: BorderRadius.circular(30),
+            (opcion) {
+              return AnimatedContainer(
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                duration: const Duration(milliseconds: 200),
+                decoration: BoxDecoration(
+                  color: Colors.grey[800],
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[800],
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: CheckboxListTile(
+                        enabled: !widget.finalizado,
+                        activeColor: Colors.white,
+                        checkColor: Colors.grey[800],
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title:
+                            Text(opcion, style: const TextStyle(fontSize: 25)),
+                        value: respuestasEntradas.contains(opcion),
+                        onChanged: (value) {
+                          if (value == true) {
+                            respuestasEntradas.add(opcion);
+                            opcionesEntradasMap
+                                .addEntries([MapEntry(opcion, 'No aplica')]);
+                          } else {
+                            respuestasEntradas.remove(opcion);
+                            opcionesEntradasMap.remove(opcion);
+                          }
+                          widget.alSeleccionarRespuestas(opcionesEntradasMap);
+                          setState(() {});
+                        },
+                      ),
                     ),
-                    child: CheckboxListTile(
-                      activeColor: Colors.white,
-                      checkColor: Colors.grey[800],
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(opcion, style: const TextStyle(fontSize: 25)),
-                      value: respuestasEntradas.contains(opcion),
-                      onChanged: (value) {
-                        if (value == true) {
-                          respuestasEntradas.add(opcion);
-                        } else {
-                          respuestasEntradas.remove(opcion);
-                        }
-                        widget.alSeleccionarEntradas(respuestasEntradas);
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                  GroupButton(
-                    //entradas
-                    onSelected: (value, index, isSelected) {
-                      // if (value == 'done') {
-                      //   respuesta = 'Correcto';
-                      // } else if (value == 'close') {
-                      //   respuesta = 'Incorrecto';
-                      // } else if (value == 'f/s') {
-                      //   respuesta = 'Falta/ Sobran';
-                      // } else {
-                      //   respuesta = '';
-                      // }
-                      widget.alSeleccionarOpciones(respuestasEntradas);
-                      setState(() {});
-                    },
-                    buttons: widget.entradas,
-                    buttonBuilder: (selected, value, context) {
-                      return AnimatedContainer(
-                        margin: EdgeInsets.only(
-                            bottom:
-                                respuestasEntradas.contains(opcion) ? 10 : 0),
-                        duration: const Duration(milliseconds: 200),
-                        height: respuestasEntradas.contains(opcion) ? 80 : 0,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: selected ? Colors.grey[900] : Colors.white,
-                          border: Border.all(
-                            width: 3,
-                            color: colorSeleccionado(value, selected),
+                    !respuestasEntradas.contains(opcion)
+                        ? const SizedBox(height: 0)
+                        : GroupButton(
+                            // maxSelected: widget.finalizado ? 0 : 1,
+                            controller: controllers[widget.opciones
+                                .indexOf(opcion)], //asigna el controlador
+                            onSelected: (value, index, isSelected) {
+                              opcionesEntradasMap[opcion] = value;
+                              widget
+                                  .alSeleccionarRespuestas(opcionesEntradasMap);
+                              setState(() {});
+                            },
+                            buttons: widget.entradas,
+                            buttonBuilder: (selected, value, context) {
+                              return AnimatedContainer(
+                                margin: EdgeInsets.only(
+                                  bottom: respuestasEntradas.contains(opcion)
+                                      ? 10
+                                      : 0,
+                                ),
+                                duration: const Duration(milliseconds: 200),
+                                height: respuestasEntradas.contains(opcion)
+                                    ? 80
+                                    : 0,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: selected
+                                      ? Colors.grey[900]
+                                      : Colors.white,
+                                  border: Border.all(
+                                    width: 3,
+                                    color: colorSeleccionado(value, selected),
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    seleccionado(value, selected,
+                                        respuestasEntradas.contains(opcion)),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            seleccionado(value, selected,
-                                respuestasEntradas.contains(opcion)),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+                  ],
+                ),
+              );
+            },
           ),
           const SizedBox(height: 10),
         ],

@@ -8,15 +8,17 @@ import 'package:group_button/group_button.dart';
 class CampoRadioButton extends StatefulWidget {
   final List<String> opciones;
   final List<String> entradas;
-  final ValueChanged<String> alSeleccionarOpcion;
-  final ValueChanged<String> alSeleccionarEntrada;
+  final ValueChanged<Map<String, String>> alSeleccionarRespuesta;
+  final Map<String, String> respuestas;
+  final bool finalizado;
 
   const CampoRadioButton({
     super.key,
     required this.opciones,
     required this.entradas,
-    required this.alSeleccionarEntrada,
-    required this.alSeleccionarOpcion,
+    required this.alSeleccionarRespuesta,
+    required this.respuestas,
+    required this.finalizado,
   });
 
   @override
@@ -24,9 +26,28 @@ class CampoRadioButton extends StatefulWidget {
 }
 
 class _CampoRadioButtonState extends State<CampoRadioButton> {
-  int? groupValue = null;
+  int? groupValue;
+  GroupButtonController controller = GroupButtonController();
   String opcion = '';
-  String entrada = '';
+  String entrada = 'No aplica';
+  Map<String, String> opcionesEntradasMap = {};
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if (widget.respuestas.isNotEmpty) {
+      opcion = widget.respuestas.keys.toList()[0];
+      groupValue = widget.opciones.indexOf(widget.respuestas.keys.toList()[0]);
+
+      controller.selectIndex(widget.entradas
+          .indexOf(widget.respuestas[widget.respuestas.keys.toList()[0]]!));
+      if (widget.finalizado) {
+        controller.disableIndexes([0, 1, 2]);
+      }
+    }
+  }
 
   Widget seleccionado(String seleccionado, bool selected, bool bool) {
     if (seleccionado.contains('done')) {
@@ -78,91 +99,108 @@ class _CampoRadioButtonState extends State<CampoRadioButton> {
               ...widget.opciones.map(
                 (e) {
                   return Container(
-                    margin: const EdgeInsets.only(top: 10),
+                    margin: EdgeInsets.only(
+                        top: 10, bottom: e == widget.opciones.last ? 10 : 0),
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
                     decoration: BoxDecoration(
                       color: Colors.grey[800],
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: RadioListTile(
-                      toggleable: true,
-                      title: Text(
-                        e,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
+                    child: IgnorePointer(
+                      ignoring: widget.finalizado,
+                      child: RadioListTile(
+                        toggleable: true,
+                        title: Text(
+                          e,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                          ),
                         ),
+                        value: widget.opciones.indexOf(e),
+                        groupValue: groupValue,
+                        onChanged: (int? value) {
+                          setState(
+                            () {
+                              groupValue = value;
+                              if (value != null) {
+                                opcionesEntradasMap.clear();
+                                opcion = e;
+                                opcionesEntradasMap
+                                    .addEntries([MapEntry(opcion, entrada)]);
+                              } else {
+                                opcionesEntradasMap.clear();
+                                opcion = '';
+                                entrada = 'No aplica';
+                                controller.selectIndex(-1);
+                              }
+                              widget
+                                  .alSeleccionarRespuesta(opcionesEntradasMap);
+                              setState(() {});
+                            },
+                          );
+                        },
                       ),
-                      value: widget.opciones.indexOf(e),
-                      groupValue: groupValue,
-                      onChanged: (int? value) {
-                        setState(
-                          () {
-                            opcion = value == null ? '' : e.toString();
-                            widget.alSeleccionarOpcion(opcion);
-                            groupValue = value;
-                            setState(() {});
-                          },
-                        );
-                      },
                     ),
                   );
                 },
               ).toList(),
-              Column(
-                children: [
-                  GroupButton(
-                    onSelected: (value, index, isSelected) {
-                      setState(() {
-                        entrada = value;
-                        widget.alSeleccionarEntrada(entrada);
-                      });
-                    },
-                    buttonBuilder: (selected, value, context) {
-                      return Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            height: groupValue != null ? 80 : 0,
-                            width: 80,
-                            decoration: BoxDecoration(
-                              color: selected ? Colors.grey[800] : Colors.white,
-                              border: Border.all(
-                                width: 3,
-                                color: colorSeleccionado(value, selected),
-                              ),
-                              shape: BoxShape.circle,
+              GroupButton(
+                controller: controller,
+                onSelected: (value, index, isSelected) {
+                  setState(() {
+                    entrada = value;
+                    opcionesEntradasMap[opcion] = entrada;
+                    widget.alSeleccionarRespuesta(opcionesEntradasMap);
+                  });
+                },
+                buttonBuilder: (selected, value, context) {
+                  return Padding(
+                    padding: groupValue != null
+                        ? EdgeInsets.only(top: 10, bottom: 10)
+                        : EdgeInsets.all(0),
+                    child: Column(
+                      children: [
+                        AnimatedContainer(
+                          padding: const EdgeInsets.all(10),
+                          duration: const Duration(milliseconds: 100),
+                          height: groupValue != null ? 80 : 0,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            color: selected ? Colors.grey[800] : Colors.white,
+                            border: Border.all(
+                              width: 3,
+                              color: colorSeleccionado(value, selected),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                seleccionado(
-                                    value, selected, groupValue != null),
-                              ],
-                            ),
+                            shape: BoxShape.circle,
                           ),
-                        ],
-                      );
-                    },
-                    buttons: widget.entradas,
-                    options: GroupButtonOptions(
-                      mainGroupAlignment: MainGroupAlignment.end,
-                      spacing: 10,
-                      unselectedTextStyle: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                      selectedTextStyle: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                      selectedColor: Colors.grey[900],
-                      unselectedColor: Colors.grey[700],
-                      borderRadius: BorderRadius.circular(30),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              seleccionado(value, selected, groupValue != null),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
+                  );
+                },
+                buttons: widget.entradas,
+                options: GroupButtonOptions(
+                  mainGroupAlignment: MainGroupAlignment.end,
+                  spacing: 10,
+                  unselectedTextStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
-                ],
+                  selectedTextStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                  selectedColor: Colors.grey[900],
+                  unselectedColor: Colors.grey[700],
+                  borderRadius: BorderRadius.circular(30),
+                ),
               ),
             ],
           )

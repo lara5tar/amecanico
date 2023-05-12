@@ -38,7 +38,6 @@ class _IngresarCarroState extends State<IngresarCarro> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     imagenC.iniciar();
   }
@@ -50,26 +49,46 @@ class _IngresarCarroState extends State<IngresarCarro> {
         if (value != null) {
           print(value.path);
 
-          Coche coche = Coche(
-            marca: marca.text,
-            modelo: modelo.text,
-            anio: anio.text,
-            motor: motor.text,
-            vin: vin.text,
-            kilometraje: km.text,
-            placa: placas.text,
-            imagen: value.path,
-          );
+          // Coche coche = Coche(
+          //   marca: marca.text,
+          //   modelo: modelo.text,
+          //   anio: anio.text,
+          //   motor: motor.text,
+          //   vin: vin.text,
+          //   kilometraje: km.text,
+          //   placa: placas.text,
+          //   imagen: value.path,
+          // );
 
-          if (widget.seGuardara) {
-            print('opcion 1');
-            Ccliente().agregarCocheACliente(widget.cliente, coche);
-            Navigator.pop(context);
-          } else {
-            print('opcion 2');
-            widget.cliente.coches.add(coche);
-            Navigator.pop(context, coche);
-          }
+          // if (widget.seGuardara) {
+          //   print('opcion 1');
+          //   Ccliente().agregarCocheACliente(widget.cliente, coche);
+          //   Navigator.pop(context);
+          // } else {
+          //   print('opcion 2');
+          //   widget.cliente.coches.add(coche);
+          //   Navigator.pop(context, coche);
+          // }
+        }
+        Coche coche = Coche(
+          marca: marca.text,
+          modelo: modelo.text,
+          anio: anio.text,
+          motor: motor.text,
+          vin: vin.text,
+          kilometraje: km.text,
+          placa: placas.text,
+          imagen: value == null ? '' : value.path,
+        );
+
+        if (widget.seGuardara) {
+          print('opcion 1');
+          Ccliente().agregarCocheACliente(widget.cliente, coche);
+          Navigator.pop(context);
+        } else {
+          print('opcion 2');
+          widget.cliente.coches.add(coche);
+          Navigator.pop(context, coche);
         }
       },
     );
