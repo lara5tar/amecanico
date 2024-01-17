@@ -178,7 +178,8 @@ class _GenerarCitaPageState extends State<GenerarCitaPage> {
   void initState() {
     super.initState();
     fecha = widget.fecha;
-    controlador.text = fecha.toString().replaceRange(10, 23, '');
+    controlador.text =
+        fecha.toString().replaceRange(10, fecha.toString().length, '');
   }
 
   @override
@@ -459,7 +460,6 @@ class _GenerarCitaPageState extends State<GenerarCitaPage> {
                           horaInicio: fecha,
                           horaFin: fecha,
                           color: Colors.orangeAccent,
-                          evento: '',
                         );
                         Navigator.pop(context);
                         Navigator.pop(context);

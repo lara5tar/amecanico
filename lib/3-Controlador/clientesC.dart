@@ -1,3 +1,4 @@
+import 'package:amecanico/main.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../1-Modelo/Cliente.dart';
@@ -64,6 +65,7 @@ class Ccliente {
     }
 
     var cliente = Cliente(
+      id: generateCode(nombre.text),
       nombre: nombre.text,
       domicilio: domicilio.text == '' ? 'Sin domicilio' : domicilio.text,
       telefono: telefono.text == '' ? 'Sin telefono' : telefono.text,

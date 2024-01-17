@@ -1,11 +1,12 @@
 import 'dart:io';
 
-import 'package:amecanico/3-Controlador/ImagenC.dart';
+import 'package:amecanico/3-Controlador/ImagenControlador.dart';
 import 'package:amecanico/3-Controlador/clientesC.dart';
 import 'package:flutter/material.dart';
 import '../../1-Modelo/Cliente.dart';
 import '../../1-Modelo/Coche.dart';
 
+//throw error
 class IngresarCarro extends StatefulWidget {
   final Cliente cliente;
   final bool seGuardara;
@@ -17,7 +18,7 @@ class IngresarCarro extends StatefulWidget {
 }
 
 class _IngresarCarroState extends State<IngresarCarro> {
-  ImagenC imagenC = ImagenC();
+  ImagenControlador imagenC = ImagenControlador();
   File? imagen;
 
   TextEditingController marca = TextEditingController();
@@ -44,33 +45,14 @@ class _IngresarCarroState extends State<IngresarCarro> {
     imagenC.iniciar();
   }
 
+  //aqui esto ponerlo en otro archivo donde esten los metodos del crud de coche
+
   void agregarCoche() {
     imagenC.guardarImagen().then(
       (value) {
-        print('path' + value.toString());
+        print('path$value');
         if (value != null) {
           print(value.path);
-
-          // Coche coche = Coche(
-          //   marca: marca.text,
-          //   modelo: modelo.text,
-          //   anio: anio.text,
-          //   motor: motor.text,
-          //   vin: vin.text,
-          //   kilometraje: km.text,
-          //   placa: placas.text,
-          //   imagen: value.path,
-          // );
-
-          // if (widget.seGuardara) {
-          //   print('opcion 1');
-          //   Ccliente().agregarCocheACliente(widget.cliente, coche);
-          //   Navigator.pop(context);
-          // } else {
-          //   print('opcion 2');
-          //   widget.cliente.coches.add(coche);
-          //   Navigator.pop(context, coche);
-          // }
         }
         Coche coche = Coche(
           marca: marca.text,
@@ -101,7 +83,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ingresa el vehiculo'),
+        title: const Text('Ingresa el vehiculo'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -125,6 +107,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
                       context: context,
                       builder: (_) => AlertDialog(
                         title: const Text('Imagen del coche'),
+                        //aqui hacer un metodo aparte para obtener imagen si la imagen existe
                         content: imagen != null
                             ? Image.file(imagen!)
                             : const Text('No hay imagen'),
@@ -146,6 +129,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
                       border: Border.all(color: Colors.grey[400]!),
                       borderRadius: BorderRadius.circular(30),
                       color: Colors.grey[300],
+                      //igual aqui hacer metodo para saber si la ijmagen existe
                       image: imagen != null
                           ? DecorationImage(
                               image: FileImage(imagen!),
@@ -153,6 +137,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
                             )
                           : null,
                     ),
+                    //aqui tambien
                     child: imagen != null
                         ? null
                         : Icon(
@@ -174,6 +159,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
                                   height: 50,
                                   child: ElevatedButton(
                                     onPressed: () {
+                                      //esto hacer en un crud de imagen
                                       imagen = null;
                                       imagenC.imagenX = null;
                                       setState(() {});
@@ -188,6 +174,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
+                            //crud de imagen
                             imagenC.tomarImagen().then((value) {
                               imagen = value;
                               setState(() {});
@@ -197,10 +184,11 @@ class _IngresarCarroState extends State<IngresarCarro> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Container(
+                      SizedBox(
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
+                            //crud de imagen c
                             imagenC.imagenDeGaleria().then((value) {
                               imagen = value;
                               setState(() {});

@@ -1,4 +1,3 @@
-import 'package:amecanico/main.dart';
 import 'package:hive/hive.dart';
 
 import 'Coche.dart';
@@ -29,14 +28,15 @@ class Cliente {
     required this.coches,
     this.fechaCreacion = '',
     this.fechaModificacion = '',
+    required this.id,
   }) {
-    contador = contador + 1;
-    id = generateCode(contador.toString()) + contador.toString();
+    // contador = contador + 1;
+    // id = generateCode(contador.toString()) + contador.toString();
   }
 
   @override
   String toString() =>
-      'Cliente(nombre: $nombre, domicilio: $domicilio, telefono: $telefono, coches: $coches)';
+      'Cliente(id: $id, nombre: $nombre, domicilio: $domicilio, telefono: $telefono, coches: $coches)';
 }
 
 class ClienteAdapter extends TypeAdapter<Cliente> {
@@ -46,6 +46,7 @@ class ClienteAdapter extends TypeAdapter<Cliente> {
   @override
   Cliente read(BinaryReader reader) {
     return Cliente(
+      id: reader.read(),
       nombre: reader.read(),
       domicilio: reader.read(),
       telefono: reader.read(),
@@ -58,6 +59,7 @@ class ClienteAdapter extends TypeAdapter<Cliente> {
   @override
   void write(BinaryWriter writer, Cliente obj) {
     writer
+      ..write(obj.id)
       ..write(obj.nombre)
       ..write(obj.domicilio)
       ..write(obj.telefono)

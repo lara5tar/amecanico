@@ -5,7 +5,8 @@ import 'package:amecanico/2-Vista/Cliente/AgregarCoche.dart';
 import 'package:amecanico/3-Controlador/reporteC.dart';
 import 'package:flutter/material.dart';
 import '../../1-Modelo/Coche.dart';
-import '../../3-Controlador/ImagenC.dart';
+import '../../3-Controlador/ImagenControlador.dart';
+import '../../3-Controlador/clientesC.dart';
 
 // ignore: must_be_immutable
 class NewSeleccionarCoche extends StatefulWidget {
@@ -36,7 +37,7 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 200,
               child: PageView(
                 onPageChanged: (value) {
@@ -44,7 +45,7 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                     index = value;
                   });
                 },
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 padEnds: false,
                 children: [
                   for (var i = 0; i < widget.cliente.coches.length; i++)
@@ -137,7 +138,7 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                             .withOpacity(0.5),
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     size: 15,
                     Icons.add,
                     color: Colors.white,
@@ -149,7 +150,7 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
             Expanded(
               child: Container(
                 child: ListView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   children: [
                     index == widget.cliente.coches.length
                         ? const SizedBox()
@@ -159,12 +160,12 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                                 title: Text(
                                   widget.cliente.coches[index].marca
                                       .toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
+                                subtitle: const Text(
                                   'MARCA',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -179,12 +180,12 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                                 title: Text(
                                   widget.cliente.coches[index].modelo
                                       .toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
+                                subtitle: const Text(
                                   'MODELO',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -199,12 +200,12 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                                 title: Text(
                                   widget.cliente.coches[index].placa
                                       .toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
+                                subtitle: const Text(
                                   'PLACA',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -219,12 +220,12 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                                 title: Text(
                                   widget.cliente.coches[index].anio
                                       .toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
+                                subtitle: const Text(
                                   'AÑO',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -239,12 +240,12 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                                 title: Text(
                                   widget.cliente.coches[index].motor
                                       .toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
+                                subtitle: const Text(
                                   'MOTOR',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -259,12 +260,12 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                                 title: Text(
                                   widget.cliente.coches[index].placa
                                       .toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
+                                subtitle: const Text(
                                   'PLACA',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -279,12 +280,12 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                                 title: Text(
                                   widget.cliente.coches[index].vin
                                       .toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
+                                subtitle: const Text(
                                   'VIN',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -299,12 +300,12 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
                                 title: Text(
                                   widget.cliente.coches[index].kilometraje
                                       .toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
+                                subtitle: const Text(
                                   'KILOMETRAJE',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -325,6 +326,8 @@ class _NewSeleccionarCocheState extends State<NewSeleccionarCoche> {
           ? FloatingActionButton.extended(
               onPressed: () {
                 ReporteC controlador = ReporteC(reporte: widget.plantilla);
+                widget.cliente.coches[index].seleccionado = true;
+                Ccliente().guardarCambios(widget.cliente);
                 controlador.crearReporteBorrador(
                     widget.cliente, widget.cliente.coches[index]);
                 Navigator.push(
@@ -365,7 +368,7 @@ class TarjetaCoche extends StatefulWidget {
 }
 
 class _TarjetaCocheState extends State<TarjetaCoche> {
-  ImagenC imagenC = ImagenC();
+  ImagenControlador imagenC = ImagenControlador();
   File? imagen;
   @override
   void initState() {
@@ -417,7 +420,7 @@ class _TarjetaCocheState extends State<TarjetaCoche> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
+                const Text(
                   'MARCA',
                   style: TextStyle(
                     fontSize: 15,
@@ -427,14 +430,14 @@ class _TarjetaCocheState extends State<TarjetaCoche> {
                 ),
                 Text(
                   widget.coche.marca.toUpperCase(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                   overflow: TextOverflow.visible,
                 ),
-                Text(
+                const Text(
                   'MODELO',
                   style: TextStyle(
                     fontSize: 15,
@@ -444,7 +447,7 @@ class _TarjetaCocheState extends State<TarjetaCoche> {
                 ),
                 Text(
                   widget.coche.modelo.toUpperCase(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,

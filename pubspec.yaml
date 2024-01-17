@@ -39,7 +39,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   permission_handler: ^10.2.0
-  contacts_service: ^0.6.3
+  # contacts_service: ^0.6.3
   calendar_view: ^1.0.3
   group_button: ^5.2.2
   custom_radio_grouped_button: ^2.2.0
@@ -50,6 +50,8 @@ dependencies:
   camera: ^0.10.5
   url_launcher: ^6.1.11
   intl: ^0.18.1
+  # flutter_pdfview: ^1.3.0
+  # flutter_full_pdf_viewer: ^1.0.6
 
 
 dev_dependencies:

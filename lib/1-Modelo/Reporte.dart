@@ -1,12 +1,20 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:amecanico/1-Modelo/Servicios.dart';
 import 'package:amecanico/3-Controlador/reporteC.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:intl/intl.dart';
+import 'package:pdf/pdf.dart';
 
-import '../3-Controlador/ImagenC.dart';
+import '../3-Controlador/ImagenControlador.dart';
 
 import 'package:hive/hive.dart';
+
+import '../3-Controlador/reportepdf.dart';
+
+import 'package:path_provider/path_provider.dart';
 
 @HiveType(typeId: 3)
 class Reporte {
@@ -27,9 +35,9 @@ class Reporte {
   @HiveField(7)
   List<String> imagenes = [];
   @HiveField(8)
-  Map<String, dynamic> mapa = {};
-  @HiveField(9)
-  static int contador = 0;
+  String conceptos;
+  // @HiveField(9)
+  // static int contador = 0;
 
   Reporte({
     required this.fecha,
@@ -40,27 +48,124 @@ class Reporte {
     required this.coche,
     required this.servicios,
     required this.imagenes,
-    required this.mapa,
+    required this.conceptos,
   }) {
-    contador = contador + 1;
+    // contador = contador + 1;
+  }
+
+  Future<Directory> getDirectory() async {
+    return await getApplicationDocumentsDirectory();
   }
 
   Widget construirWidget(bool finalizado) {
-    ImagenC imagenC = ImagenC();
+    ImagenControlador imagenC = ImagenControlador();
     imagenC.iniciar();
     ReporteC reporteC = ReporteC(reporte: this);
     return StatefulBuilder(
       builder: (context, setState) => Scaffold(
         appBar: AppBar(
           toolbarHeight: 80,
-          title: Text('Reporte'),
+          title: const Text('Orden'),
           actions: [
             finalizado
-                ? Container()
+                // ? Container()
+                ? Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: ElevatedButton(
+                      style: const ButtonStyle(
+                          // shape:
+                          ),
+                      onPressed: () async {
+                        final dir = (await getDirectory()).path;
+                        var pdf = await generateReporte(
+                          PdfPageFormat.letter,
+                          ticket: [
+                            {
+                              "tipo": "concepto",
+                              "nombre": "Thermostato",
+                              "seleccionado": 180.00,
+                            },
+                            {
+                              "tipo": "concepto",
+                              "nombre": "Reemplazo de Thermostato",
+                              "seleccionado": 220.00,
+                            },
+                          ],
+                          items: [
+                            {
+                              "tipo": "servicio",
+                              "nombre": "Afinación Mayor Completa",
+                            },
+                            {
+                              "tipo": "seccion",
+                              "nombre": "Cambio de Bujias",
+                            },
+                            {
+                              "tipo": "respuesta",
+                              "nombre": "normal",
+                              "seleccionado": "done",
+                            },
+                            {
+                              "tipo": "respuesta",
+                              "nombre": "Platino",
+                              "seleccionado": "No aplica",
+                            },
+                            {
+                              "tipo": "respuesta",
+                              "nombre": "Iridium",
+                              "seleccionado": "No aplica",
+                            },
+                          ],
+                          domicilio: 'Buen Canada Linda Vista #320',
+                          fecha: DateFormat('d MMMM yyyy [h:mm a]')
+                              .format(DateTime.now()),
+                          tel: '(833) 321 22 44',
+                          tipoMantenimiento: 'Diagóstico',
+                          cliente: 'Lupe',
+                          datosGenerales: 'Jetta 2015',
+                        );
+                        final file = File('$dir/algo3.pdf');
+                        showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text('Reporte Generado'),
+                            content: const Text(
+                                'El reporte se ha generado correctamente'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Aceptar'))
+                            ],
+                          ),
+                        );
+                        await file.writeAsBytes(pdf).whenComplete(() {
+                          Navigator.pop(context);
+                        }).then((value) async {
+                          // final dir = (await getDirectory()).path;
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => Scaffold(
+                          //       appBar: AppBar(),
+                          //       body: PDFView(
+                          //         filePath: '$dir/algo3.pdf',
+                          //         enableSwipe: true,
+                          //         swipeHorizontal: true,
+                          //         autoSpacing: false,
+                          //         pageFling: false,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // );
+                        });
+                      },
+                      child: const Text('PDF'),
+                    ),
+                  )
                 : Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: ElevatedButton(
-                      style: ButtonStyle(
+                      style: const ButtonStyle(
                           // shape:
                           ),
                       onPressed: () {
@@ -68,7 +173,7 @@ class Reporte {
                         reporteC.finalizarReporte();
                         Navigator.pop(context);
                       },
-                      child: Text('Finalizar'),
+                      child: const Text('Finalizar'),
                     ),
                   ),
           ],
@@ -76,7 +181,7 @@ class Reporte {
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(20),
-            margin: EdgeInsets.all(20),
+            margin: const EdgeInsets.all(20),
             decoration: BoxDecoration(
                 color: Colors.grey[900],
                 borderRadius: BorderRadius.circular(30)),
@@ -95,8 +200,8 @@ class Reporte {
                     const SizedBox(width: 10),
                     Text(
                       fecha,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -113,104 +218,112 @@ class Reporte {
                     const SizedBox(width: 10),
                     Text(
                       hora,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
                 Linea(),
-                Text(
+                const Text(
                   'Datos del cliente',
                   style: TextStyle(fontSize: 30),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Nombre:',
                       style: TextStyle(
                         fontSize: 20,
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      nombreCliente,
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        nombreCliente,
+                        style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Telefono:',
                       style: TextStyle(
                         fontSize: 20,
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      telefonoCliente,
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        telefonoCliente,
+                        style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Domicilio:',
                       style: TextStyle(
                         fontSize: 20,
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      domicilioCliente,
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        domicilioCliente,
+                        style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 Linea(),
-                Text(
+                const Text(
                   'Datos del coche',
                   style: TextStyle(fontSize: 30),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Coche:',
                       style: TextStyle(
                         fontSize: 20,
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      coche,
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        coche,
+                        style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 Linea(),
-                Text(
+                const Text(
                   'Imagenes',
                   style: TextStyle(fontSize: 30),
                 ),
-                SizedBox(height: 20),
-                Container(
+                const SizedBox(height: 20),
+                SizedBox(
                   height: 150,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -238,7 +351,7 @@ class Reporte {
                                   color: Colors.grey[800],
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: Icon(Icons.add_a_photo,
+                                child: const Icon(Icons.add_a_photo,
                                     size: 50, color: Colors.white),
                               ),
                             ),
@@ -258,7 +371,7 @@ class Reporte {
                             );
                           },
                           child: Container(
-                            margin: EdgeInsets.all(10),
+                            margin: const EdgeInsets.all(10),
                             child: File(e).existsSync()
                                 ? Image.file(
                                     File(e),
@@ -275,7 +388,7 @@ class Reporte {
                   ),
                 ),
                 Linea(),
-                Text(
+                const Text(
                   'Servicios',
                   style: TextStyle(fontSize: 30),
                 ),
@@ -287,6 +400,23 @@ class Reporte {
                         .toList(),
                   ],
                 ),
+                // Linea(),
+                // Text(
+                //   'Conceptos',
+                //   style: TextStyle(fontSize: 30),
+                // ),
+                // SizedBox(height: 20),
+                // Column(
+                //   children: [
+                //     // ...conceptos
+                //     //     .map((e) =>
+                //     //         Text(e['nombre']! + ': ' + e['seleccionado']!,
+                //     //             style: TextStyle(
+                //     //               fontSize: 20,
+                //     //             )))
+                //     //     .toList(),
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -297,7 +427,7 @@ class Reporte {
 
   Container Linea() {
     return Container(
-      margin: EdgeInsets.only(top: 20, bottom: 20),
+      margin: const EdgeInsets.only(top: 20, bottom: 20),
       height: 3,
       color: Colors.grey,
     );
@@ -313,7 +443,7 @@ class Reporte {
       coche: coche,
       servicios: servicios.map((e) => e.clone()).toList(),
       imagenes: imagenes,
-      mapa: mapa,
+      conceptos: conceptos,
     );
   }
 
@@ -354,7 +484,7 @@ class ReporteAdapter extends TypeAdapter<Reporte> {
       coche: reader.read(),
       servicios: List<Servicio>.from(reader.read()),
       imagenes: List<String>.from(reader.read()),
-      mapa: Map<String, dynamic>.from(reader.read()),
+      conceptos: reader.read(),
     );
   }
 
@@ -369,6 +499,6 @@ class ReporteAdapter extends TypeAdapter<Reporte> {
       ..write(obj.coche)
       ..write(obj.servicios)
       ..write(obj.imagenes)
-      ..write(obj.mapa);
+      ..write(obj.conceptos);
   }
 }

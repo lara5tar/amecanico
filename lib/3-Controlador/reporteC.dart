@@ -54,6 +54,7 @@ class ReporteC {
       reporte!,
     );
     print(reporte!.toMap());
+    print(reporte!.conceptos);
   }
 
   eliminarReporte() {

@@ -89,7 +89,6 @@ class CitasC {
     required DateTime horaInicio,
     required DateTime horaFin,
     required Color color,
-    required String evento,
   }) {
     citasBox!.add(
       CalendarEventData(

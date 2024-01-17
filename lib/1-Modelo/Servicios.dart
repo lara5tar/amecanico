@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:amecanico/3-Controlador/reporteC.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'Seccion.dart';
 import 'package:hive/hive.dart';
@@ -18,7 +21,7 @@ class Servicio {
 
   Widget construirWidget(
       ReporteC reporteC, int indexServicio, bool finalizado) {
-    return Builder(builder: (context) {
+    return StatefulBuilder(builder: (context, setState) {
       return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -31,7 +34,7 @@ class Servicio {
                 finalizado: finalizado,
               ),
             ),
-          );
+          ).then((value) => setState(() {}));
         },
         child: Container(
           padding: const EdgeInsets.all(20),
@@ -116,7 +119,79 @@ class VistaServicios extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 80,
         title: Text(titulo),
+        actions: [
+          // Padding(
+          //   padding: const EdgeInsets.all(15.0),
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       TextEditingController nombre = TextEditingController();
+          //       TextEditingController precio = TextEditingController();
+          //       showDialog(
+          //         context: context,
+          //         builder: (context) => AlertDialog(
+          //           title: Text('Agregar Concepto\$'),
+          //           content: Column(
+          //             mainAxisSize: MainAxisSize.min,
+          //             children: [
+          //               TextField(
+          //                 controller: nombre,
+          //                 decoration: InputDecoration(
+          //                   labelText: 'Nombre',
+          //                 ),
+          //               ),
+          //               TextField(
+          //                 inputFormatters: [
+          //                   FilteringTextInputFormatter.allow(
+          //                       RegExp(r'^\d+\.?\d{0,2}'))
+          //                 ],
+          //                 keyboardType:
+          //                     TextInputType.numberWithOptions(decimal: true),
+          //                 controller: precio,
+          //                 decoration: InputDecoration(
+          //                   labelText: 'Precio',
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //           actions: [
+          //             TextButton(
+          //               onPressed: () {
+          //                 Navigator.pop(context);
+          //               },
+          //               child: Text('Cancelar'),
+          //             ),
+          //             TextButton(
+          //               onPressed: () {
+          //                 var conecpto = {
+          //                   'tipo': 'concepto',
+          //                   'nombre': nombre.text,
+          //                   'seleccionado': precio.text.toString(),
+          //                 };
+
+          //                 String x = reporteC.reporte!.conceptos;
+          //                 print(x);
+
+          //                 List<dynamic> concepto = json.decode(x);
+
+          //                 concepto.add(conecpto);
+
+          //                 reporteC.reporte!.conceptos = json.encode(concepto);
+
+          //                 reporteC.guardarReporte();
+          //                 Navigator.pop(context);
+          //               },
+          //               child: Text('Aceptar'),
+          //             ),
+          //           ],
+          //         ),
+          //       );
+          //     },
+          //     child: Text('Agregar Concepto \$'),
+          //   ),
+          // ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

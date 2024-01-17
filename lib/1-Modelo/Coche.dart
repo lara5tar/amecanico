@@ -21,7 +21,9 @@ class Coche {
   @HiveField(8)
   String color;
   @HiveField(9)
-  bool seleccionado = false;
+  bool seleccionado;
+  @HiveField(10)
+  bool entregado;
 
   Coche({
     required this.marca,
@@ -33,11 +35,13 @@ class Coche {
     required this.placa,
     required this.imagen,
     required this.color,
+    this.seleccionado = false,
+    this.entregado = false,
   });
 
   @override
   String toString() =>
-      'marca: $marca, modelo: $modelo, anio: $anio, motor: $motor, vin: $vin, kilometraje: $kilometraje, placa: $placa, imagen: $imagen';
+      'marca: $marca, modelo: $modelo, anio: $anio, motor: $motor, vin: $vin, kilometraje: $kilometraje, placa: $placa';
 }
 
 class CocheAdapter extends TypeAdapter<Coche> {
@@ -56,6 +60,8 @@ class CocheAdapter extends TypeAdapter<Coche> {
       placa: reader.read(),
       imagen: reader.read(),
       color: reader.read(),
+      seleccionado: reader.readBool(),
+      entregado: reader.readBool(),
     );
   }
 
@@ -70,6 +76,8 @@ class CocheAdapter extends TypeAdapter<Coche> {
       ..write(obj.kilometraje)
       ..write(obj.placa)
       ..write(obj.imagen)
-      ..write(obj.color);
+      ..write(obj.color)
+      ..writeBool(obj.seleccionado)
+      ..writeBool(obj.entregado);
   }
 }

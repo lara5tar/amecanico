@@ -21,12 +21,12 @@ class _PruebaPDFState extends State<PruebaPDF> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                Cliente cliente = Cliente(
-                  nombre: 'Juan',
-                  telefono: '123456789',
-                  domicilio: 'Calle 1',
-                  coches: [],
-                );
+                // Cliente cliente = Cliente(
+                //   nombre: 'Juan',
+                //   telefono: '123456789',
+                //   domicilio: 'Calle 1',
+                //   coches: [],
+                // );
                 // Navigator.push(
                 //   context,
                 //   MaterialPageRoute(

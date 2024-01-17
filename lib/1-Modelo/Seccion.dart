@@ -27,15 +27,18 @@ class Seccion {
       ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                titulo,
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          titulo.isEmpty
+              ? const SizedBox()
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      titulo,
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
           ...campos.map(
             (campo) => Column(
               children: [

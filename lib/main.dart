@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:amecanico/1-Modelo/Campo.dart';
 import 'package:amecanico/1-Modelo/Reporte.dart';
 import 'package:amecanico/1-Modelo/Seccion.dart';
 import 'package:amecanico/1-Modelo/Servicios.dart';
-import 'package:amecanico/3-Controlador/ImagenC.dart';
+import 'package:amecanico/3-Controlador/ImagenControlador.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +23,7 @@ void main() {
     ),
   );
   initFlutter();
-  ImagenC().iniciar();
+  ImagenControlador().iniciar();
 
   print(generateCode('l'));
 
@@ -70,15 +69,24 @@ initFlutter() async {
   Hive.registerAdapter<Servicio>(ServicioAdapter());
   Hive.registerAdapter<Reporte>(ReporteAdapter());
 
-  await Hive.openBox<Reporte>('reportes');
-  await Hive.openBox<Reporte>('borradores');
+  var r = await Hive.openBox<Reporte>('reportes');
+  var borradores = await Hive.openBox<Reporte>('borradores');
   var reportes = await Hive.openBox<Reporte>('plantillas');
+
+  var x = await Hive.openBox('configuracion');
+
+  if (x.isEmpty) {
+    x.put('inicio', '0');
+    for (Cliente cliente in clienteS()) {
+      clientes.put(cliente.id, cliente);
+    }
+  }
 
   // clientes.addAll(clienteS());
 
-  // for (Cliente cliente in clienteS()) {
-  //   clientes.put(cliente.id, cliente);
-  // }
+  // clientes.clear();
+  // borradores.clear();
+  // r.clear();
 
   await Hive.openBox('mensajes');
 
@@ -87,7 +95,7 @@ initFlutter() async {
   reportes.put(
     'Orden Simple',
     Reporte(
-      mapa: {},
+      conceptos: '[]',
       fecha: '',
       hora: '',
       nombreCliente: '',
@@ -192,18 +200,18 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         darkTheme: ThemeData(
-          cardColor: Color(0xff2c3e50),
+          cardColor: const Color(0xff2c3e50),
           brightness: Brightness.dark,
         ),
         theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: colorAzul,
-            cardColor: Color(0xff2c3e50),
-            accentColor: Color(0xFFFF6E40),
+            cardColor: const Color(0xff2c3e50),
+            accentColor: const Color(0xFFFF6E40),
             brightness: Brightness.dark,
           ),
         ),
-        home: HomePage(),
+        home: const HomePage(),
       ),
     );
   }
@@ -212,6 +220,7 @@ class MyApp extends StatelessWidget {
 clienteS() {
   return [
     Cliente(
+      id: generateCode('Leslie Noemi'),
       nombre: 'Leslie Noemi',
       domicilio: 'Calle del Sol # 456, Colonia Centro',
       telefono: '833-456-7890',
@@ -230,6 +239,7 @@ clienteS() {
       ],
     ),
     Cliente(
+      id: generateCode('Juan García'),
       nombre: 'Juan García',
       domicilio: 'Avenida de la Revolución # 789, Colonia Juárez',
       telefono: '833-123-4567',
@@ -270,6 +280,7 @@ clienteS() {
       ],
     ),
     Cliente(
+      id: generateCode('Ana López'),
       nombre: 'Ana López',
       domicilio: 'Calle Ocampo # 321, Colonia San Francisco',
       telefono: '833-987-6543',
@@ -299,6 +310,7 @@ clienteS() {
       ],
     ),
     Cliente(
+      id: generateCode('Luis Torres'),
       nombre: 'Luis Torres',
       domicilio: 'Calle 16 de Septiembre # 234, Colonia Centro',
       telefono: '833-234-5678',
@@ -328,6 +340,7 @@ clienteS() {
       ],
     ),
     Cliente(
+      id: generateCode('María Ramírez'),
       nombre: 'María Ramírez',
       domicilio: 'Avenida Insurgentes # 567, Colonia Condesa',
       telefono: '833-876-5432',
@@ -368,6 +381,7 @@ clienteS() {
       ],
     ),
     Cliente(
+      id: generateCode('Carlos Mendoza'),
       nombre: 'Carlos Mendoza',
       domicilio: 'Calle Hidalgo # 987, Colonia Centro',
       telefono: '833-345-6789',
@@ -386,6 +400,7 @@ clienteS() {
       ],
     ),
     Cliente(
+      id: generateCode('Laura Ortiz'),
       nombre: 'Laura Ortiz',
       domicilio: 'Avenida México # 432, Colonia Lomas',
       telefono: '833-765-4321',
@@ -415,6 +430,7 @@ clienteS() {
       ],
     ),
     Cliente(
+      id: generateCode('José Morales'),
       nombre: 'José Morales',
       domicilio: 'Calle Galeana # 123, Colonia Centro',
       telefono: '833-890-1234',
@@ -444,6 +460,7 @@ clienteS() {
       ],
     ),
     Cliente(
+      id: generateCode('Isabel Castro'),
       nombre: 'Isabel Castro',
       domicilio: 'Calle Ignacio Allende # 345, Colonia Centro',
       telefono: '833-678-9012',
@@ -462,6 +479,7 @@ clienteS() {
       ],
     ),
     Cliente(
+      id: generateCode('Miguel Vargas'),
       nombre: 'Miguel Vargas',
       domicilio: 'Avenida Madero # 654, Colonia Centro Histórico',
       telefono: '833-210-9876',
@@ -506,7 +524,7 @@ clienteS() {
 
 reporte() {
   return Reporte(
-    mapa: {},
+    conceptos: '[]',
     fecha: '',
     hora: '',
     nombreCliente: '',

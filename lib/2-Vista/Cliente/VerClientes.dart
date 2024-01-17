@@ -34,6 +34,39 @@ class _VerClienteState extends State<VerCliente> {
     });
   }
 
+  void sendWhatsAppMessage(String phoneNumber) async {
+    // String phoneNumber =
+    //     '+52 1 833 382 0929'; // Número de teléfono del destinatario
+    // String message = 'Hola, ¿cómo estás?'; // Mensaje a enviar
+
+    var url =
+        'https://wa.me/${phoneNumber.replaceAll(' - ', '')}?text=HelloWorld';
+    print('https://wa.me/${phoneNumber.replaceAll(' - ', '')}?text=HelloWorld');
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'No se pudo abrir la URL: $url';
+    }
+  }
+
+  // void sendWhatsAppMessage(String phoneNumber, String mensaje) async {
+  //   var url = 'https://wa.me/$phoneNumber?text=$mensaje}';
+  //   final link = Uri(
+  //     scheme: 'https',
+  //     path: 'wa.me/$phoneNumber',
+  //     queryParameters: <String, String>{
+  //       'text': mensaje.replaceAll('cliente', widget.cliente.nombre)
+  //     },
+  //   );
+
+  //   if (await canLaunchUrl(Uri.parse(url))) {
+  //     await launchUrl(Uri.parse(url));
+  //   } else {
+  //     throw 'No se pudo abrir la URL: $url';
+  //   }
+  // }
+
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -57,7 +90,7 @@ class _VerClienteState extends State<VerCliente> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Datos del Cliente'),
+        title: Text('Datos del Cliente ${widget.cliente.id}'),
       ),
       body: Column(
         children: [
@@ -132,10 +165,20 @@ class _VerClienteState extends State<VerCliente> {
                     ? () => setState(
                           () {
                             // _launched = _sendSms(widget.cliente.telefono);
-                            dialogosms(context);
+                            dialogosms(context, 'whatsapp');
                           },
                         )
                     : null,
+                icon: ImageIcon(
+                  AssetImage('assets/was.png'),
+                  size: 40,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  // sendWhatsAppMessage(widget.cliente.telefono, 'hola');
+                  dialogosms(context, 'sms');
+                },
                 icon: const Icon(
                   Icons.message,
                   size: 40,
@@ -168,7 +211,7 @@ class _VerClienteState extends State<VerCliente> {
     );
   }
 
-  Future<dynamic> dialogosms(BuildContext context) {
+  Future<dynamic> dialogosms(BuildContext context, String tipo) {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -195,11 +238,14 @@ class _VerClienteState extends State<VerCliente> {
                           (e) => TextButton(
                             onPressed: () {
                               setState(() {
-                                launched = _sendSms(
-                                  widget.cliente.telefono,
-                                  e,
-                                );
-                                // Navigator.pop(context);
+                                if (tipo == 'sms') {
+                                  launched = _sendSms(
+                                    widget.cliente.telefono,
+                                    e,
+                                  );
+                                } else if (tipo == 'whatsapp') {
+                                  sendWhatsAppMessage(widget.cliente.telefono);
+                                }
                               });
                             },
                             child: Text(
@@ -228,12 +274,13 @@ class _VerClienteState extends State<VerCliente> {
                               TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    Navigator.pop(context);
                                   },
                                   child: Text('Cancelar')),
                               TextButton(
                                   onPressed: () {
                                     Hive.box('mensajes').add(controller.text);
+                                    Navigator.pop(context);
+
                                     Navigator.pop(context);
                                     controller.clear();
                                   },

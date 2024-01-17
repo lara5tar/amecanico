@@ -34,92 +34,102 @@ class _ClientePageState extends State<ClientePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 10),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: ListView(
-              children: [
-                cclientes.clientes.length == 0
-                    ? Center(child: Text('No hay clientes'))
-                    : SizedBox(),
-                for (var clientesletra in listaclientes)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        title: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            clientesletra[0].nombre.substring(0, 1),
-                            style: TextStyle(
-                              fontSize: 30,
+    return RefreshIndicator(
+      onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 1));
+        setState(() {
+          listaclientes = cclientes.listClientesOrdenadosPorLetra;
+        });
+      },
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: ListView(
+                children: [
+                  cclientes.clientes.length == 0
+                      ? Center(child: Text('No hay clientes'))
+                      : SizedBox(),
+                  for (var clientesletra in listaclientes)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              clientesletra[0].nombre.substring(0, 1),
+                              style: TextStyle(
+                                fontSize: 30,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: isDarkMode(context),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            for (int i = 0; i < clientesletra.length - 1; i++)
-                              Column(
-                                children: [
-                                  CustomListTile(
-                                    esSeleccionado: false,
-                                    onTap: () {
-                                      print(clientesletra[i]);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => VerCliente(
-                                            cliente: clientesletra[i],
+                        Container(
+                          decoration: BoxDecoration(
+                            color: isDarkMode(context),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              for (int i = 0; i < clientesletra.length - 1; i++)
+                                Column(
+                                  children: [
+                                    CustomListTile(
+                                      esSeleccionado: false,
+                                      onTap: () {
+                                        print(clientesletra[i]);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => VerCliente(
+                                              cliente: clientesletra[i],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                    cliente: clientesletra[i],
-                                    esUltimo: false,
-                                  ),
-                                ],
-                              ),
-                            CustomListTile(
-                              esSeleccionado: false,
-                              onTap: () {
-                                print(clientesletra[clientesletra.length - 1]);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VerCliente(
-                                      cliente: clientesletra[
-                                          clientesletra.length - 1],
+                                        );
+                                      },
+                                      cliente: clientesletra[i],
+                                      esUltimo: false,
                                     ),
-                                  ),
-                                );
-                              },
-                              cliente: clientesletra[clientesletra.length - 1],
-                              esUltimo: true,
-                            ),
-                          ],
+                                  ],
+                                ),
+                              CustomListTile(
+                                esSeleccionado: false,
+                                onTap: () {
+                                  print(
+                                      clientesletra[clientesletra.length - 1]);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VerCliente(
+                                        cliente: clientesletra[
+                                            clientesletra.length - 1],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                cliente:
+                                    clientesletra[clientesletra.length - 1],
+                                esUltimo: true,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                const SizedBox(height: 60),
-              ],
+                      ],
+                    ),
+                  const SizedBox(height: 60),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
