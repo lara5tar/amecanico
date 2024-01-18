@@ -23,7 +23,7 @@ void main() {
     ),
   );
   initFlutter();
-  ImagenControlador().iniciar();
+  ImageService().iniciar();
 
   print(generateCode('l'));
 

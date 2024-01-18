@@ -58,7 +58,7 @@ class Reporte {
   }
 
   Widget construirWidget(bool finalizado) {
-    ImagenControlador imagenC = ImagenControlador();
+    ImageService imagenC = ImageService();
     imagenC.iniciar();
     ReporteC reporteC = ReporteC(reporte: this);
     return StatefulBuilder(

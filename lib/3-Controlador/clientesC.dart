@@ -1,3 +1,4 @@
+import 'package:amecanico/Componetizacion/CustomTextField.dart';
 import 'package:amecanico/main.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -46,8 +47,21 @@ class Ccliente {
         .toList();
   }
 
-  void agregarCocheACliente(Cliente cliente, Coche coche) {
-    cliente.coches.add(coche);
+  void agregarCocheACliente(Cliente cliente,
+      List<CustomTextController> controladores, String rutaImagen) {
+    cliente.coches.add(
+      Coche(
+        marca: controladores[0].getText(),
+        modelo: controladores[1].getText(),
+        anio: controladores[2].getText(),
+        motor: controladores[3].getText(),
+        vin: controladores[4].getText(),
+        kilometraje: controladores[5].getText(),
+        placa: controladores[6].getText(),
+        color: controladores[7].getText(),
+        imagen: rutaImagen,
+      ),
+    );
     clientes.put(cliente.id, cliente);
   }
 

@@ -18,7 +18,7 @@ class IngresarCarro extends StatefulWidget {
 }
 
 class _IngresarCarroState extends State<IngresarCarro> {
-  ImagenControlador imagenC = ImagenControlador();
+  ImageService imagenC = ImageService();
   File? imagen;
 
   TextEditingController marca = TextEditingController();
@@ -68,7 +68,7 @@ class _IngresarCarroState extends State<IngresarCarro> {
 
         if (widget.seGuardara) {
           print('opcion 1');
-          Ccliente().agregarCocheACliente(widget.cliente, coche);
+          // Ccliente().agregarCocheACliente(widget.cliente, coche);
           Navigator.pop(context);
         } else {
           print('opcion 2');

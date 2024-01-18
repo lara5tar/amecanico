@@ -368,7 +368,7 @@ class TarjetaCoche extends StatefulWidget {
 }
 
 class _TarjetaCocheState extends State<TarjetaCoche> {
-  ImagenControlador imagenC = ImagenControlador();
+  ImageService imagenC = ImageService();
   File? imagen;
   @override
   void initState() {

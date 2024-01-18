@@ -1,3 +1,4 @@
+import 'package:amecanico/Componetizacion/IngresarCarroPage.dart';
 import 'package:flutter/material.dart';
 
 import '../../1-Modelo/Cliente.dart';
@@ -169,7 +170,7 @@ class _VerClienteState extends State<VerCliente> {
                           },
                         )
                     : null,
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage('assets/was.png'),
                   size: 40,
                 ),
@@ -208,6 +209,22 @@ class _VerClienteState extends State<VerCliente> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => IngresarCarroPage(
+                cliente: widget.cliente,
+                seGuardara: true,
+              ),
+            ),
+          ).then((value) {
+            setState(() {});
+          });
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
@@ -215,19 +232,19 @@ class _VerClienteState extends State<VerCliente> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Enviar SMS'),
+        title: const Text('Enviar SMS'),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
         ],
         content: StatefulBuilder(
           builder: (context, snapshot) {
-            return Container(
+            return SizedBox(
               height: 100,
               child: SingleChildScrollView(
                 child: Column(
@@ -259,7 +276,7 @@ class _VerClienteState extends State<VerCliente> {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text('Agregar mensaje'),
+                            title: const Text('Agregar mensaje'),
                             content: TextField(
                               controller: controller,
                               onChanged: (value) {
@@ -267,7 +284,7 @@ class _VerClienteState extends State<VerCliente> {
                                   phone = value;
                                 });
                               },
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: 'Ingrese el mensaje'),
                             ),
                             actions: [
@@ -275,7 +292,7 @@ class _VerClienteState extends State<VerCliente> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('Cancelar')),
+                                  child: const Text('Cancelar')),
                               TextButton(
                                   onPressed: () {
                                     Hive.box('mensajes').add(controller.text);
@@ -284,7 +301,7 @@ class _VerClienteState extends State<VerCliente> {
                                     Navigator.pop(context);
                                     controller.clear();
                                   },
-                                  child: Text('Aceptar')),
+                                  child: const Text('Aceptar')),
                             ],
                           ),
                         ).then(
@@ -293,7 +310,7 @@ class _VerClienteState extends State<VerCliente> {
                           ),
                         );
                       },
-                      child: Text('Agregar mensaje'),
+                      child: const Text('Agregar mensaje'),
                     ),
                   ],
                 ),
